@@ -1,6 +1,8 @@
 import {Intro} from "../../../features/intro";
 import styles from "./HomePage.module.scss";
 import {Popular} from "../../../features/popular";
+import {Novelty} from "../../../features/novelty";
+import {AllTimeFavorites} from "../../../features/AllTimeFavorites";
 
 const HomePage = () => {
 
@@ -21,21 +23,9 @@ const HomePage = () => {
 
             <Popular animeList={animeList} />
 
-            <section className={styles.section}>
-                <h2 className={styles.sectionTitle}>Предстоящий сезон</h2>
+            <Novelty animeList={animeList} />
 
-                <div className={styles.comingSoon}>
-                    <p>Скоро здесь появятся горячие новинки следующего сезона!</p>
-                </div>
-            </section>
-
-            <section className={styles.section}>
-                <h2 className={styles.sectionTitle}>Популярны всегда</h2>
-
-                <div className={styles.alwaysPopular}>
-                    <p>Топ-тайтлы, которые всегда остаются фаворитами зрителей.</p>
-                </div>
-            </section>
+            <AllTimeFavorites animeList={animeList} />
 
         </main>
     )

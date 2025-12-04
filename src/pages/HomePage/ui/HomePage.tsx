@@ -1,8 +1,9 @@
-import {Intro} from "../../../features/intro";
+import {Intro} from "../../../features/homePage/intro";
 import styles from "./HomePage.module.scss";
-import {Popular} from "../../../features/popular";
-import {Novelty} from "../../../features/novelty";
-import {AllTimeFavorites} from "../../../features/AllTimeFavorites";
+import {Popular} from "../../../features/homePage/popular";
+import {Novelty} from "../../../features/homePage/novelty";
+import {AllTimeFavorites} from "../../../features/homePage/AllTimeFavorites";
+import {News} from "../../../features/homePage/news";
 
 const HomePage = () => {
 
@@ -24,6 +25,8 @@ const HomePage = () => {
             <Popular animeList={animeList} />
 
             <Novelty animeList={animeList} />
+
+            <News />
 
             <AllTimeFavorites animeList={animeList} />
 

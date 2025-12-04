@@ -1,10 +1,10 @@
 import cls from './Intro.module.scss';
-import {classNames} from "../../../shared/lib/classNames/classNames.ts";
+import {classNames} from "../../../../shared/lib/classNames/classNames.ts";
 import {Swiper, SwiperSlide} from "swiper/react";
 import { Autoplay } from "swiper/modules";
-import bg1 from "../../../shared/assets/img/homePage/bg-1.jpg";
-import bg2 from "../../../shared/assets/img/homePage/bg-2.jpg";
-import bg3 from "../../../shared/assets/img/homePage/bg-3.jpg";
+import bg1 from "../../../../shared/assets/img/homePage/bg-1.jpg";
+import bg2 from "../../../../shared/assets/img/homePage/bg-2.jpg";
+import bg3 from "../../../../shared/assets/img/homePage/bg-3.jpg";
 import "swiper/css";
 
 interface IntroProps {

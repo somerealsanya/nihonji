@@ -1,8 +1,8 @@
-import {SwiperBlock} from "../../../shared/ui/SwiperBlock";
+import {SwiperBlock} from "../../../../shared/ui/SwiperBlock";
 import {SwiperSlide} from "swiper/react";
-import {AnimeCard} from "../../../entities/anime";
-import type {Anime} from "../../../entities/anime/model/anime.ts";
-import {Section} from "../../../shared/ui/Section";
+import {AnimeCard} from "../../../../entities/anime";
+import type {Anime} from "../../../../entities/anime/model/anime.ts";
+import {Section} from "../../../../shared/ui/Section";
 
 interface NoveltyProps {
     className?: string;

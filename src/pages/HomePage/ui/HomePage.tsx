@@ -29,7 +29,6 @@ const HomePage = () => {
             <News />
 
             <AllTimeFavorites animeList={animeList} />
-
         </main>
     )
 }

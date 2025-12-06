@@ -2,6 +2,8 @@ import type { RouteProps } from "react-router-dom";
 import {HomePage} from "../../../pages/HomePage";
 import {CatalogPage} from "../../../pages/CatalogPage";
 import { AppRoutes, routePaths } from "./routes.ts";
+import {NoveltyPage} from "../../../pages/NoveltyPage";
+import {Popular} from "../../../pages/PopularPage";
 
 
 export const routeConfig: Record<AppRoutes, RouteProps> = {
@@ -12,5 +14,13 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
     [AppRoutes.CATALOG]: {
         path: routePaths[AppRoutes.CATALOG],
         element: <CatalogPage />
+    },
+    [AppRoutes.NOVELTY]: {
+        path: routePaths[AppRoutes.NOVELTY],
+        element: <NoveltyPage />
+    },
+    [AppRoutes.POPULAR]: {
+        path: routePaths[AppRoutes.POPULAR],
+        element: <Popular />
     }
 }

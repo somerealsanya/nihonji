@@ -4,31 +4,34 @@ import {Popular} from "../../../features/homePage/popular";
 import {Novelty} from "../../../features/homePage/novelty";
 import {AllTimeFavorites} from "../../../features/homePage/AllTimeFavorites";
 import {News} from "../../../features/homePage/news";
+import {useEffect, useState} from "react";
+import {AnimeService} from "../../../shared/api/services/AnimeService.ts";
 
 const HomePage = () => {
 
-    const animeList = [
-        { id: 1, title: "Dandadan", rating: 8.6, img: "/anime/dandadan.jpg" },
-        { id: 2, title: "Blue Lock S2", rating: 8.2, img: "/anime/bluelock.jpg" },
-        { id: 3, title: "Kaiju No.8", rating: 8.4, img: "/anime/kaiju8.jpg" },
-        { id: 4, title: "Solo Leveling S2", rating: 8.8, img: "/anime/sololeveling.jpg" },
-        { id: 5, title: "Dandadan", rating: 8.6, img: "/anime/dandadan.jpg" },
-        { id: 6, title: "Blue Lock S2", rating: 8.2, img: "/anime/bluelock.jpg" },
-        { id: 7, title: "Kaiju No.8", rating: 8.4, img: "/anime/kaiju8.jpg" },
-        { id: 8, title: "Solo Leveling S2", rating: 8.8, img: "/anime/sololeveling.jpg" }
-    ];
+    const [animeList, setAnimeList] = useState([]);
+
+    useEffect(() => {
+        const fetchAnime = async () => {
+            const data = await AnimeService.getAnime();
+            setAnimeList(data);
+        }
+        fetchAnime();
+    }, []);
 
     return (
         <main className={styles.homePage}>
             <Intro />
 
-            <Popular animeList={animeList} />
+            <div className={styles.upper}>
+                <Popular animeList={animeList} />
 
-            <Novelty animeList={animeList} />
+                <Novelty animeList={animeList} />
 
-            <News />
+                <News />
 
-            <AllTimeFavorites animeList={animeList} />
+                <AllTimeFavorites animeList={animeList} />
+            </div>
         </main>
     )
 }

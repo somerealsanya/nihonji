@@ -7,8 +7,16 @@ export const animeApi = jikanApi.injectEndpoints({
         getPopularAnime: build.query<Anime[], void>({
             query: () => `/anime?order_by=popularity`,
             transformResponse: (resp: any) => resp.data
+        }),
+        getAnimeById: build.query<Anime, string>({
+            query: (id : string) => `/anime/${id}/full`,
+            transformResponse: (resp: any) => resp.data
+        }),
+        getAnimePicture: build.query<Anime, string>({
+            query: (id : string) => `/anime/${id}/pictures`,
+            transformResponse: (resp: any) => resp.data
         })
     })
 });
 
-export const { useGetPopularAnimeQuery } = animeApi;
+export const { useGetPopularAnimeQuery, useGetAnimeByIdQuery, useGetAnimePictureQuery } = animeApi;

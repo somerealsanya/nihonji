@@ -1,29 +1,31 @@
 import {Intro} from "../../../features/homePage/intro";
-import styles from "./HomePage.module.scss";
+import cls from "./HomePage.module.scss";
 import {Popular} from "../../../features/homePage/popular";
 import {Novelty} from "../../../features/homePage/novelty";
 import {AllTimeFavorites} from "../../../features/homePage/AllTimeFavorites";
 import {News} from "../../../features/homePage/news";
-import {useEffect, useState} from "react";
-import {AnimeService} from "../../../shared/api/services/AnimeService.ts";
+import {useGetPopularAnimeQuery} from "../../../entities/anime/api/animeApi.ts";
+import {Loader} from "../../../shared/ui/Loader";
 
 const HomePage = () => {
 
-    const [animeList, setAnimeList] = useState([]);
+    const {data, error, isLoading} = useGetPopularAnimeQuery();
 
-    useEffect(() => {
-        const fetchAnime = async () => {
-            const data = await AnimeService.getAnime();
-            setAnimeList(data);
-        }
-        fetchAnime();
-    }, []);
+    if (isLoading) {
+        return (
+            <div className={cls.loader}>
+                <Loader />
+            </div>
+        )
+    }
+
+    const animeList = data ?? [];
 
     return (
-        <main className={styles.homePage}>
+        <main className={cls.homePage}>
             <Intro />
 
-            <div className={styles.upper}>
+            <div className={cls.upper}>
                 <Popular animeList={animeList} />
 
                 <Novelty animeList={animeList} />

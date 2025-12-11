@@ -10,14 +10,19 @@ interface AnimeCardProps {
 }
 
 
-export const AnimeCard = ({anime, className}: AnimeCardProps) => {
+export const AnimeCard = ({ anime, className }: AnimeCardProps) => {
+    const img =
+        anime.images?.jpg?.large_image_url ||
+        anime.images?.jpg?.image_url ||
+        anime.images?.webp?.large_image_url ||
+        anime.images?.webp?.image_url ||
+        "";
+
     return (
         <div className={classNames(cls.AnimeCard, {}, [className])}>
-            <img
-                className={cls.animeImg}
-                src={anime.images?.jpg?.image_url}
-                alt={anime.title}
-            />
+            <div className={cls.imgWrapper}>
+                <img className={cls.animeImg} src={img} alt={anime.title} />
+            </div>
 
             <h3 className={cls.animeName}>
                 {anime.title_english || anime.title}

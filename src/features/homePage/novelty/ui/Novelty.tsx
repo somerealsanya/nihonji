@@ -12,7 +12,7 @@ interface NoveltyProps {
 
 export const Novelty = ({animeList, className}: NoveltyProps) => {
     return (
-        <Section title="Онгоинг" className={className}>
+        <Section title="Онгоинги" className={className}>
             <SwiperBlock>
                 {animeList.map((anime) => (
                     <SwiperSlide key={anime.mal_id}>

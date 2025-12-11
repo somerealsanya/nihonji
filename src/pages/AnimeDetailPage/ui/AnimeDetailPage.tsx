@@ -1,4 +1,3 @@
-// src/pages/AnimeDetailPage/AnimeDetailPage.tsx
 import React, { useEffect, useMemo, useState } from "react";
 import cls from "./AnimeDetailPage.module.scss";
 import { classNames } from "../../../shared/lib/classNames/classNames.ts";
@@ -8,13 +7,12 @@ import {
     useGetAnimeByIdQuery,
     useGetAnimeCharactersQuery,
     useGetAnimePictureQuery,
-    useGetAnimeRecommendationsQuery,
     useGetAnimeStaffQuery,
 } from "../../../entities/anime/api/animeApi.ts";
 import { Loader } from "../../../shared/ui/Loader";
 import {Star, Trophy, Play, Search} from "lucide-react";
 
-import type { AnimeCharacter, AnimeRecommendation, AnimeStaff } from "../../../entities/anime/model/anime";
+import type { AnimeCharacter, AnimeStaff } from "../../../entities/anime/model/anime";
 import { toYouTubeEmbedUrl, toYouTubeWatchUrl, formatDate, joinNames, pickImage } from "../../../shared/utils/animeHelpers";
 
 import PosterCard from "./PosterCard/PosterCard.tsx";
@@ -34,7 +32,6 @@ export const AnimeDetailPage: React.FC<AnimeDetailPageProps> = ({ className }) =
     const { data, error, isLoading } = useGetAnimeByIdQuery(id ?? "", { skip: !id });
     const { data: picturesData } = useGetAnimePictureQuery(id ?? "", { skip: !id });
     const { data: charactersData } = useGetAnimeCharactersQuery(id ?? "", { skip: !id });
-    const { data: recommendationsData } = useGetAnimeRecommendationsQuery(id ?? "", { skip: !id });
     const { data: staffData } = useGetAnimeStaffQuery(id ?? "", { skip: !id });
 
     const [activeSection, setActiveSection] = useState<ViewSection>("overview");
@@ -43,50 +40,26 @@ export const AnimeDetailPage: React.FC<AnimeDetailPageProps> = ({ className }) =
     const [modalImageSrc, setModalImageSrc] = useState<string | null>(null);
     const [modalImageCaption, setModalImageCaption] = useState<string | null>(null);
 
-    // Навигация можно возвращать после вызова хуков
-    if (!id) return <Navigate to="/" replace />;
 
-    // Нормализация: картинки
     const pictures = useMemo(() => {
         if (!picturesData) return [];
         if (Array.isArray(picturesData)) return picturesData;
-        if (picturesData.pictures && Array.isArray(picturesData.pictures)) return picturesData.pictures;
         return [];
     }, [picturesData]);
 
-    // Нормализация: персонажи (в большинстве ответов - массив)
     const allCharacters = useMemo<AnimeCharacter[]>(() => {
         if (!charactersData) return [];
         if (Array.isArray(charactersData)) return charactersData;
-        if (charactersData.data && Array.isArray(charactersData.data)) return charactersData.data;
-        if (charactersData.characters && Array.isArray(charactersData.characters)) return charactersData.characters;
         return [];
     }, [charactersData]);
 
-    // Нормализация: рекомендации
-    const allRecommendations = useMemo<AnimeRecommendation[]>(() => {
-        if (!recommendationsData) return [];
-        if (Array.isArray(recommendationsData)) return recommendationsData;
-        if (recommendationsData.data && Array.isArray(recommendationsData.data)) return recommendationsData.data;
-        if (recommendationsData.recommendations && Array.isArray(recommendationsData.recommendations)) return recommendationsData.recommendations;
-        return [];
-    }, [recommendationsData]);
 
-    // Нормализация: staff — учтены разные варианты ответа
     const staff = useMemo<AnimeStaff[]>(() => {
         if (!staffData) return [];
 
         if (Array.isArray(staffData)) return staffData as AnimeStaff[];
 
-        if (staffData.staff) {
-            if (Array.isArray(staffData.staff)) return staffData.staff;
-            if (Array.isArray(staffData.staff.data)) return staffData.staff.data;
-            if (typeof staffData.staff === "object" && (staffData.staff.person || staffData.staff.name)) return [staffData.staff as unknown as AnimeStaff];
-        }
-
         if (Array.isArray((staffData as any).data)) return (staffData as any).data;
-
-        if (typeof staffData === "object" && (staffData.person || staffData.name)) return [staffData as unknown as AnimeStaff];
 
         return [];
     }, [staffData]);
@@ -94,7 +67,6 @@ export const AnimeDetailPage: React.FC<AnimeDetailPageProps> = ({ className }) =
     const previewChars = allCharacters.slice(0, 7);
     const previewStaff = staff.slice(0, 7);
 
-    // close modal on Escape or when modal src becomes null
     useEffect(() => {
         const handler = (e: KeyboardEvent) => {
             if (e.key === "Escape") {
@@ -110,6 +82,8 @@ export const AnimeDetailPage: React.FC<AnimeDetailPageProps> = ({ className }) =
             window.removeEventListener("keydown", handler);
         };
     }, [isImageModalOpen]);
+
+    if (!id) return <Navigate to="/" replace />;
 
     const openImageModal = (src: string | null, caption?: string | null) => {
         if (!src) return;
@@ -210,7 +184,7 @@ export const AnimeDetailPage: React.FC<AnimeDetailPageProps> = ({ className }) =
                                     {pictures.length > 0 ? (
                                         <div className={cls.picturesRow}>
                                             {pictures.map((pic: any, idx: number) => {
-                                                const url = typeof pic === "string" ? pic : pic?.jpg?.image_url || pic?.image_url || pic?.jpg?.large_image_url || pic?.webp?.image_url || pic?.large_image_url || "";
+                                                const url = typeof pic === "string" ? pic : pic?.jpg?.large_image_url ||  pic?.jpg?.image_url || pic?.image_url ||  pic?.webp?.image_url || pic?.large_image_url || "";
                                                 const caption = pic?.title || pic?.caption || data.title || "";
                                                 const key = pic?.id ?? (url ? `pic-${encodeURIComponent(String(url))}` : `pic-${idx}`);
                                                 return (
@@ -227,7 +201,6 @@ export const AnimeDetailPage: React.FC<AnimeDetailPageProps> = ({ className }) =
                                                         ) : (
                                                             <div className={cls.picturePlaceholder}>No preview</div>
                                                         )}
-                                                        {caption ? <div className={cls.pictureCaption}>{caption}</div> : null}
                                                     </div>
                                                 );
                                             })}
@@ -241,7 +214,7 @@ export const AnimeDetailPage: React.FC<AnimeDetailPageProps> = ({ className }) =
                                         {previewChars.length > 0 ? previewChars.map((c: any, idx: number) => {
                                             const charObj = c.character || c;
                                             const key = charObj?.mal_id ?? charObj?.id ?? `char-${charObj?.name ?? idx}-${idx}`;
-                                            return <CharacterCard key={String(key)} c={c} posterFallback={poster} />;
+                                            return <CharacterCard key={String(key)} c={c} posterFallback={poster} onOpenImage={openImageModal} />;
                                         }) : <div className={cls.empty}>Characters data not available.</div>}
                                     </div>
                                 </section>
@@ -261,7 +234,7 @@ export const AnimeDetailPage: React.FC<AnimeDetailPageProps> = ({ className }) =
                                         {previewStaff.map((s: any, idx: number) => {
                                             const person = s.person || s;
                                             const key = person?.mal_id ?? person?.id ?? `staff-${person?.name ?? idx}-${idx}`;
-                                            return <StaffCard key={String(key)} s={s} posterFallback={poster} />;
+                                            return <StaffCard key={String(key)} s={s} posterFallback={poster} onOpenImage={openImageModal} />;
                                         })}
                                         {previewStaff.length === 0 && <div className={cls.empty}>No staff available.</div>}
                                     </div>
@@ -272,7 +245,7 @@ export const AnimeDetailPage: React.FC<AnimeDetailPageProps> = ({ className }) =
                         {activeSection === "characters" && (
                             <section className={cls.section}>
                                 <SectionHeader title="All Characters" />
-                                <div className={cls.modalList}>
+                                <div className={cls.charList}>
                                     {allCharacters.length > 0 ? allCharacters.map((c: any, idx: number) => {
                                         const charObj = c.character || c;
                                         const name = charObj?.name || `Character ${idx}`;
@@ -281,15 +254,21 @@ export const AnimeDetailPage: React.FC<AnimeDetailPageProps> = ({ className }) =
                                         const vas = c.voice_actors || [];
                                         const key = charObj?.mal_id ?? charObj?.id ?? `char-all-${idx}-${name}`;
                                         return (
-                                            <div className={cls.modalListItem} key={String(key)}>
-                                                <div className={cls.zoomContainer} onClick={() => openImageModal(thumb, name)}>
-                                                    <img src={thumb} alt={name} className={cls.modalListThumb} />
-                                                    <div className={cls.zoomOverlay}><Search /></div>
+                                            <div className={cls.charCard} key={String(key)}>
+                                                <div className={cls.charThumbWrapper} onClick={() => openImageModal(thumb, name)}>
+                                                    <img src={thumb} alt={name} className={cls.charThumb} />
+                                                    <div className={cls.zoomOverlay}><Search size={18} /></div>
                                                 </div>
-                                                <div>
-                                                    <div style={{ fontWeight: 700 }}>{name}</div>
-                                                    <div style={{ color: "rgba(255,255,255,0.7)" }}>{role}</div>
-                                                    {vas.length > 0 && <div style={{ color: "rgba(255,255,255,0.6)", marginTop: 6 }}>{vas.map((v: any) => v.person?.name || v.name).join(", ")}</div>}
+
+                                                <div className={cls.charInfo}>
+                                                    <div className={cls.charName}>{name}</div>
+                                                    <div className={cls.charRole}>{role}</div>
+
+                                                    {vas.length > 0 && (
+                                                        <div className={cls.charVA}>
+                                                            {vas.map((v: any) => v.person?.name || v.name).join(", ")}
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
                                         );
@@ -308,20 +287,32 @@ export const AnimeDetailPage: React.FC<AnimeDetailPageProps> = ({ className }) =
                                         const img = pickImage(person, poster);
                                         const pos = s.positions?.join?.(", ") ?? s.role ?? "—";
                                         const key = person?.mal_id ?? person?.id ?? `staff-all-${idx}-${name}`;
+
                                         return (
-                                            <div className={cls.modalListItem} key={String(key)}>
-                                                <div className={cls.zoomContainer} onClick={() => openImageModal(img, name)}>
-                                                    <img src={img} alt={name} className={cls.modalListThumb} />
-                                                    <div className={cls.zoomOverlay}><Search /></div>
-                                                </div>
-                                                <div>
-                                                    <div style={{ fontWeight: 700 }}>{name}</div>
-                                                    <div style={{ color: "rgba(255,255,255,0.7)" }}>{pos}</div>
+                                            <div className={cls.staffOverlayCard} key={String(key)}>
+                                                <div className={cls.staffOverlayImgWrap}>
+                                                    <button
+                                                        type="button"
+                                                        className={cls.staffThumbBtn}
+                                                        onClick={() => openImageModal(img, name)}
+                                                        aria-label={`Open ${name} image`}
+                                                    >
+                                                        <img src={img} alt={name} className={cls.staffOverlayImg} />
+                                                        <div className={cls.zoomOverlay}><Search size={16} /></div>
+                                                    </button>
+
+                                                    <div className={cls.staffOverlayGradient} />
+
+                                                    <div className={cls.staffOverlayText}>
+                                                        <div className={cls.staffOverlayName}>{name}</div>
+                                                        <div className={cls.staffOverlayPos}>{pos}</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         );
                                     }) : <div className={cls.empty}>No staff available.</div>}
                                 </div>
+
                             </section>
                         )}
                     </div>
@@ -348,4 +339,3 @@ export const AnimeDetailPage: React.FC<AnimeDetailPageProps> = ({ className }) =
     );
 };
 
-export default AnimeDetailPage;

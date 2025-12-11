@@ -268,14 +268,13 @@
   border: 1px solid rgba(255,255,255,0.03);
   padding: 8px;
   border-radius: 8px;
-  width: 220px;
   display: flex;
   gap: 10px;
   align-items: center;
 }
 
 .charThumb {
-  width: 48px;
+  width: px;
   height: 48px;
   border-radius: 6px;
   object-fit: cover;
@@ -283,12 +282,7 @@
 }
 
 .section {
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.02);
-  border-radius: 5px;
   padding: 16px;
-  backdrop-filter: blur(6px);
-  box-shadow: 0 10px 26px rgba(0,0,0,0.55);
 }
 
 .infoList li {
@@ -427,22 +421,17 @@
   color: rgba(255,255,255,0.7);
 }
 
-/* --- pictures / list helpers --- */
 .picturesRow {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
 }
 
-.pictureItem {
-  width: 200px;
-}
-
 .pictureImg {
   width: 100%;
-  height: 120px;
+  height: 220px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 5px;
   border: 1px solid rgba(255,255,255,0.03);
 }
 
@@ -464,30 +453,243 @@
 }
 
 /* --- modalList used as plain vertical list view --- */
-.modalList {
+/* ----- CHARACTER CARD ----- */
+
+.charCard {
+  width: 150px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 10px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  transition: all .25s ease;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255,255,255,0.06);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+  }
+}
+
+/* Image wrapper — with overlay hover */
+.charThumbWrapper {
+  width: 120px;
+  height: 180px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+
+  &:hover .zoomOverlay {
+    opacity: 1;
+  }
+
+  &:hover img {
+    transform: scale(1.05);
+  }
+}
+
+.charThumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+  transition: transform .25s ease;
+}
+
+/* Overlay */
+.zoomOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.45);
+  opacity: 0;
+  transition: opacity .25s ease;
+  border-radius: inherit;
+
+  svg {
+    color: #fff;
+  }
+}
+
+/* Info text styles */
+
+.charList {
+  display: flex;
+  flex-wrap: wrap;
   gap: 12px;
   margin-top: 8px;
 }
 
-.modalListItem {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  background: rgba(255,255,255,0.02);
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.03);
+.charInfo {
+  text-align: center;
+  width: 100%;
 }
 
-.modalListThumb {
-  width: 66px;
-  height: 88px;
-  object-fit: cover;
-  border-radius: 6px;
-  flex-shrink: 0;
+.charName {
+  font-weight: 600;
+  font-size: 15px;
+  color: #fff;
+  margin-bottom: 4px;
 }
+
+.charRole {
+  font-size: 14px;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 4px;
+}
+
+.charVA {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.3;
+}
+
+/* --- STAFF overlay card (matches character overlay) --- */
+
+.staffOverlayCard {
+  width: 150px;
+  height: 210px;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.05);
+  background: #0f0f0f;
+  transition: transform .25s ease, box-shadow .25s ease;
+  display: inline-block; /* чтобы элемент вёлся как карточка в строке */
+  vertical-align: top;
+  margin: 6px;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+  }
+
+  &:hover .staffOverlayImg {
+    transform: scale(1.08);
+  }
+
+  &:hover .staffOverlayGradient {
+    opacity: 1;
+  }
+
+  &:hover .zoomOverlay {
+    opacity: 1;
+  }
+}
+
+.staffOverlayImgWrap {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* кнопка-обёртка для картинки: доступно и клавиатурно-работает */
+.staffThumbBtn {
+  display: block;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;
+  width: 100%;
+  height: 100%;
+  text-align: left;
+  cursor: pointer;
+  position: relative;
+  outline: none;
+
+  &:focus {
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.06);
+  }
+}
+
+.staffOverlayImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .35s ease;
+  display: block;
+}
+
+/* полоса затемнения снизу */
+.staffOverlayGradient {
+  position: absolute;
+  bottom: 0;
+  height: 55%;
+  width: 100%;
+  background: linear-gradient(
+                  to top,
+                  rgba(0,0,0,0.8),
+                  rgba(0,0,0,0.5),
+                  rgba(0,0,0,0)
+  );
+  opacity: 0.9;
+  transition: opacity .25s ease;
+}
+
+/* текст поверх градиента */
+.staffOverlayText {
+  position: absolute;
+  bottom: 8px;
+  left: 10px;
+  right: 10px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+}
+
+.staffOverlayName {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.1;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.45);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.staffOverlayPos {
+  font-size: 12px;
+  color: rgba(255,255,255,0.75);
+  margin-top: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* общая иконка-затемнение при hover */
+.zoomOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.22);
+  opacity: 0;
+  transition: opacity .25s ease;
+  z-index: 2;
+
+  svg { color: #fff; }
+}
+
+/* адаптив: уменьшаем карточки на мобильных */
+@media (max-width: 480px) {
+  .staffOverlayCard {
+    width: 120px;
+    height: 170px;
+  }
+  .staffOverlayName { font-size: 13px; }
+  .staffOverlayPos { font-size: 11px; }
+}
+
+
 
 /* --- staff row --- */
 .staffRow {
@@ -538,6 +740,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.imageModalInner img {
+  width: 500px;
 }
 
 .imageModalClose {

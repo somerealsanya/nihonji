@@ -6,18 +6,32 @@ import { pickImage } from "../../../../shared/utils/animeHelpers";
 type Props = {
     c: AnimeCharacter | any;
     posterFallback?: string;
+    onOpenImage?: (src: string | null, caption?: string | null) => void;
 };
 
-export const CharacterCard: React.FC<Props> = ({ c, posterFallback }) => {
+export const CharacterCard: React.FC<Props> = ({ c, posterFallback, onOpenImage }) => {
     const charObj = c.character || c;
     const name = charObj?.name ?? "—";
     const thumb = pickImage(charObj, posterFallback);
     const role = c.role || charObj?.role || "—";
     const va = c.voice_actors || [];
 
+    const handleClick = () => {
+        if (!thumb) return;
+        onOpenImage?.(thumb, name);
+    };
+
     return (
         <div className={cls.card}>
-            <img className={cls.thumb} src={thumb} alt={name} />
+            <button
+                type="button"
+                className={cls.thumbButton}
+                onClick={handleClick}
+                aria-label={`Open ${name} image`}
+            >
+                <img className={cls.thumb} src={thumb} alt={name} />
+            </button>
+
             <div className={cls.info}>
                 <div className={cls.name}>{name}</div>
                 <div className={cls.role}>{role}</div>

@@ -43,7 +43,7 @@ export const AddToListButton: React.FC<Props> = ({ animeId }) => {
                 aria-expanded={open}
                 type="button"
             >
-                {status === "watched" ? "Просмотрено" : status === "planned" ? "В планах" : "Add to List"}
+                {status === "watched" ? "Watched" : status === "planned" ? "Planned" : "Add to List"}
                 <span className={cls.arrow}><ChevronDown /></span>
             </button>
 

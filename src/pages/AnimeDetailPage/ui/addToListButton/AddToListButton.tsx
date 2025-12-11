@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import cls from "./AddToListButton.module.scss";
-import { ChevronDown } from "lucide-react";
+import {ChevronDown, ChevronUp} from "lucide-react";
 
 type Props = {
     animeId: string;
@@ -40,12 +40,22 @@ export const AddToListButton: React.FC<Props> = ({ animeId }) => {
                 className={cls.btn}
                 onClick={() => setOpen((v) => !v)}
                 aria-haspopup="true"
-                aria-expanded={open}
                 type="button"
+                style={{
+                    background: status === "watched" ? "#1ab003" : status === "planned" ? "#ff9f43" : "#2ea3ff"
+                }}
             >
-                {status === "watched" ? "Watched" : status === "planned" ? "Planned" : "Add to List"}
-                <span className={cls.arrow}><ChevronDown /></span>
+                <span className={cls.label}>
+                    {status === "watched" ? "Completed" :
+                        status === "planned" ? "Planned" :
+                            "Add to List"}
+                </span>
+
+                            <span className={cls.arrowSection}>
+                    {open ? <ChevronUp size={16}/> : <ChevronDown size={16}/>}
+                </span>
             </button>
+
 
             {open && (
                 <div className={cls.dropdown} role="menu">

@@ -50,7 +50,6 @@
     cursor: pointer;
 }
 
-/* src/pages/AnimeDetailPage/PosterCard/PosterCard.module.scss */
 .posterCard {
     width: 240px;
     margin-top: -120px;
@@ -83,7 +82,6 @@
     color: rgba(255,255,255,0.6);
 }
 
-/* actions row */
 .actions {
     width: 100%;
     display:flex;
@@ -102,7 +100,6 @@
     cursor: pointer;
 }
 
-/* zoom helpers (те же, что использовали в странице) */
 .zoomContainer {
     position: relative;
     display: inline-block;

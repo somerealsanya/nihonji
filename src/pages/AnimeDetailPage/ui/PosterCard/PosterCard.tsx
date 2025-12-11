@@ -32,7 +32,6 @@ export const PosterCard: React.FC<Props> = ({ poster, title, animeId, onOpenImag
                     <div className={cls.placeholder}>No image</div>
                 )}
 
-                {/* overlay (лупа) */}
                 <div className={cls.zoomOverlay}>
                     <Search />
                 </div>

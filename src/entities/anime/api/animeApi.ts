@@ -1,5 +1,12 @@
 import {jikanApi} from "../../../shared/api/jikanApi.ts";
-import type {Anime} from "../model/anime.ts";
+import type {
+    Anime,
+    AnimeCharacter,
+    AnimePicture,
+    AnimeRecommendation,
+    AnimeRecommendation,
+    AnimeStaff
+} from "../model/anime.ts";
 
 
 export const animeApi = jikanApi.injectEndpoints({
@@ -12,11 +19,30 @@ export const animeApi = jikanApi.injectEndpoints({
             query: (id : string) => `/anime/${id}/full`,
             transformResponse: (resp: any) => resp.data
         }),
-        getAnimePicture: build.query<Anime, string>({
+        getAnimePicture: build.query<AnimePicture, string>({
             query: (id : string) => `/anime/${id}/pictures`,
+            transformResponse: (resp: any) => resp.data
+        }),
+        getAnimeCharacters: build.query<AnimeCharacter, string>({
+            query: (id : string) => `/anime/${id}/characters`,
+            transformResponse: (resp: any) => resp.data
+        }),
+        getAnimeRecommendations: build.query<AnimeRecommendation, string>({
+            query: (id : string) => `/anime/${id}/recommendations`,
+            transformResponse: (resp: any) => resp.data
+        }),
+        getAnimeStaff: build.query<AnimeStaff, string>({
+            query: (id : string) => `/anime/${id}/staff`,
             transformResponse: (resp: any) => resp.data
         })
     })
 });
 
-export const { useGetPopularAnimeQuery, useGetAnimeByIdQuery, useGetAnimePictureQuery } = animeApi;
+export const {
+    useGetPopularAnimeQuery,
+    useGetAnimeByIdQuery,
+    useGetAnimePictureQuery,
+    useGetAnimeCharactersQuery,
+    useGetAnimeRecommendationsQuery ,
+    useGetAnimeStaffQuery
+} = animeApi;

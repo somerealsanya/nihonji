@@ -1,34 +1,128 @@
-import cls from './AnimeDetailPage.module.scss';
+// src/pages/AnimeDetailPage/AnimeDetailPage.tsx
+import React, { useEffect, useMemo, useState } from "react";
+import cls from "./AnimeDetailPage.module.scss";
 import { classNames } from "../../../shared/lib/classNames/classNames.ts";
-import {  useParams } from "react-router";
+import { useParams } from "react-router";
 import { Navigate } from "react-router-dom";
-import { useGetAnimeByIdQuery, useGetAnimePictureQuery } from "../../../entities/anime/api/animeApi.ts";
+import {
+    useGetAnimeByIdQuery,
+    useGetAnimeCharactersQuery,
+    useGetAnimePictureQuery,
+    useGetAnimeRecommendationsQuery,
+    useGetAnimeStaffQuery,
+} from "../../../entities/anime/api/animeApi.ts";
 import { Loader } from "../../../shared/ui/Loader";
-import {ChevronDown, Heart, Star} from "lucide-react";
+import {Star, Trophy, Play, Search} from "lucide-react";
+
+import type { AnimeCharacter, AnimeRecommendation, AnimeStaff } from "../../../entities/anime/model/anime";
+import { toYouTubeEmbedUrl, toYouTubeWatchUrl, formatDate, joinNames, pickImage } from "../../../shared/utils/animeHelpers";
+
+import PosterCard from "./PosterCard/PosterCard.tsx";
+import SectionHeader from "./SectionHeader/SectionHeader";
+import CharacterCard from "./CharacterCard/CharacterCard";
+import StaffCard from "./StaffCard/StaffCard";
+
+type ViewSection = "overview" | "characters" | "staff";
 
 interface AnimeDetailPageProps {
     className?: string;
 }
 
-const formatDate = (iso?: string | null) => {
-    if (!iso) return '—';
-    const d = new Date(iso);
-    if (isNaN(d.getTime())) return iso;
-    return d.toLocaleDateString();
-};
+export const AnimeDetailPage: React.FC<AnimeDetailPageProps> = ({ className }) => {
+    const { id } = useParams<{ id?: string }>();
 
-const joinNames = (arr?: { name: string }[] | null) =>
-    arr && arr.length ? arr.map((x) => x.name).join(', ') : '—';
+    const { data, error, isLoading } = useGetAnimeByIdQuery(id ?? "", { skip: !id });
+    const { data: picturesData } = useGetAnimePictureQuery(id ?? "", { skip: !id });
+    const { data: charactersData } = useGetAnimeCharactersQuery(id ?? "", { skip: !id });
+    const { data: recommendationsData } = useGetAnimeRecommendationsQuery(id ?? "", { skip: !id });
+    const { data: staffData } = useGetAnimeStaffQuery(id ?? "", { skip: !id });
 
-export const AnimeDetailPage = ({ className }: AnimeDetailPageProps) => {
-    const { id } = useParams<{ id: string }>();
+    const [activeSection, setActiveSection] = useState<ViewSection>("overview");
 
+    const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+    const [modalImageSrc, setModalImageSrc] = useState<string | null>(null);
+    const [modalImageCaption, setModalImageCaption] = useState<string | null>(null);
+
+    // Навигация можно возвращать после вызова хуков
     if (!id) return <Navigate to="/" replace />;
 
-    const { data, error, isLoading, isFetching } = useGetAnimeByIdQuery(id);
-    const { data: picturesData } = useGetAnimePictureQuery(id);
+    // Нормализация: картинки
+    const pictures = useMemo(() => {
+        if (!picturesData) return [];
+        if (Array.isArray(picturesData)) return picturesData;
+        if (picturesData.pictures && Array.isArray(picturesData.pictures)) return picturesData.pictures;
+        return [];
+    }, [picturesData]);
 
-    const pictures: any[] = Array.isArray(picturesData) ? picturesData : (picturesData && Array.isArray((picturesData as any).pictures) ? (picturesData as any).pictures : []);
+    // Нормализация: персонажи (в большинстве ответов - массив)
+    const allCharacters = useMemo<AnimeCharacter[]>(() => {
+        if (!charactersData) return [];
+        if (Array.isArray(charactersData)) return charactersData;
+        if (charactersData.data && Array.isArray(charactersData.data)) return charactersData.data;
+        if (charactersData.characters && Array.isArray(charactersData.characters)) return charactersData.characters;
+        return [];
+    }, [charactersData]);
+
+    // Нормализация: рекомендации
+    const allRecommendations = useMemo<AnimeRecommendation[]>(() => {
+        if (!recommendationsData) return [];
+        if (Array.isArray(recommendationsData)) return recommendationsData;
+        if (recommendationsData.data && Array.isArray(recommendationsData.data)) return recommendationsData.data;
+        if (recommendationsData.recommendations && Array.isArray(recommendationsData.recommendations)) return recommendationsData.recommendations;
+        return [];
+    }, [recommendationsData]);
+
+    // Нормализация: staff — учтены разные варианты ответа
+    const staff = useMemo<AnimeStaff[]>(() => {
+        if (!staffData) return [];
+
+        if (Array.isArray(staffData)) return staffData as AnimeStaff[];
+
+        if (staffData.staff) {
+            if (Array.isArray(staffData.staff)) return staffData.staff;
+            if (Array.isArray(staffData.staff.data)) return staffData.staff.data;
+            if (typeof staffData.staff === "object" && (staffData.staff.person || staffData.staff.name)) return [staffData.staff as unknown as AnimeStaff];
+        }
+
+        if (Array.isArray((staffData as any).data)) return (staffData as any).data;
+
+        if (typeof staffData === "object" && (staffData.person || staffData.name)) return [staffData as unknown as AnimeStaff];
+
+        return [];
+    }, [staffData]);
+
+    const previewChars = allCharacters.slice(0, 7);
+    const previewStaff = staff.slice(0, 7);
+
+    // close modal on Escape or when modal src becomes null
+    useEffect(() => {
+        const handler = (e: KeyboardEvent) => {
+            if (e.key === "Escape") {
+                setIsImageModalOpen(false);
+                setModalImageSrc(null);
+                setModalImageCaption(null);
+            }
+        };
+        if (isImageModalOpen) {
+            window.addEventListener("keydown", handler);
+        }
+        return () => {
+            window.removeEventListener("keydown", handler);
+        };
+    }, [isImageModalOpen]);
+
+    const openImageModal = (src: string | null, caption?: string | null) => {
+        if (!src) return;
+        setModalImageSrc(src);
+        setModalImageCaption(caption ?? null);
+        setIsImageModalOpen(true);
+    };
+
+    const closeImageModal = () => {
+        setIsImageModalOpen(false);
+        setModalImageSrc(null);
+        setModalImageCaption(null);
+    };
 
     if (isLoading) {
         return (
@@ -47,51 +141,41 @@ export const AnimeDetailPage = ({ className }: AnimeDetailPageProps) => {
     }
 
     const poster =
-        data.images?.webp?.large_image_url ||
-        data.images?.jpg?.large_image_url ||
-        data.images?.jpg?.image_url ||
-        '';
+        data?.images?.webp?.large_image_url ||
+        data?.images?.jpg?.large_image_url ||
+        data?.images?.jpg?.image_url ||
+        data?.images?.jpg?.small_image_url ||
+        "";
 
-    console.log(data)
+    const trailerRaw = data?.trailer?.embed_url || data?.trailer?.url || null;
+    const embedSrc = toYouTubeEmbedUrl(trailerRaw, {
+        autoplay: 1,
+        enablejsapi: 1,
+        origin: typeof window !== "undefined" ? window.location.origin : undefined,
+    });
+    const watchUrl = toYouTubeWatchUrl(trailerRaw);
 
     return (
         <div className={classNames(cls.AnimeDetailPage, {}, [className])}>
             <header className={cls.hero}>
-                <div
-                    className={cls.heroBg}
-                    style={{
-                        backgroundImage: `url(${data.images?.jpg?.large_image_url || data.images?.webp?.large_image_url || ''})`
-                    }}
-                />
-
+                <div className={cls.heroBg} />
                 <div className={cls.heroPanel}>
                     <div className={cls.container}>
-                        <div className={cls.posterCard}>
-                            {poster ? (
-                                <img src={poster} alt={data.title} className={cls.poster} />
-                            ) : (
-                                <div className={cls.posterPlaceholder}>No image</div>
-                            )}
-                            <div className={cls.actions}>
-                                <button className={cls.btnPrimary}>Add to List <span className={cls.arrow}><ChevronDown /></span></button>
-                                <button className={cls.iconBtn}><Heart /></button>
-                            </div>
-                        </div>
-
+                        <PosterCard poster={poster} title={data.title} animeId={String(id)} onOpenImage={openImageModal} />
                         <div className={cls.headMeta}>
                             <h1 className={cls.title}>{data.title}</h1>
                             <p className={cls.subTitle}>
-                                {data.title_english ? `${data.title_english} — ` : ''}
+                                {data.title_english ? `${data.title_english} — ` : ""}
                                 {data.title_japanese ? <span className={cls.jp}>{data.title_japanese}</span> : null}
                             </p>
-                            <p className={cls.synopsisShort}>{data.synopsis ? data.synopsis.slice(0, 360) + (data.synopsis.length > 360 ? '...' : '') : 'Описание отсутствует.'}</p>
+                            <p className={cls.synopsisShort}>
+                                {data.synopsis ? (data.synopsis.length > 360 ? data.synopsis.slice(0, 360) + "..." : data.synopsis) : "Описание отсутствует."}
+                            </p>
 
                             <nav className={cls.tabs}>
-                                <button className={cls.tabActive}>Overview</button>
-                                <button className={cls.tab}>Characters</button>
-                                <button className={cls.tab}>Staff</button>
-                                <button className={cls.tab}>Stats</button>
-                                <button className={cls.tab}>Social</button>
+                                <button className={activeSection === "overview" ? cls.tabActive : cls.tab} onClick={() => setActiveSection("overview")}>Overview</button>
+                                <button className={activeSection === "characters" ? cls.tabActive : cls.tab} onClick={() => setActiveSection("characters")}>Characters</button>
+                                <button className={activeSection === "staff" ? cls.tabActive : cls.tab} onClick={() => setActiveSection("staff")}>Staff</button>
                             </nav>
                         </div>
                     </div>
@@ -101,125 +185,165 @@ export const AnimeDetailPage = ({ className }: AnimeDetailPageProps) => {
             <main className={cls.content}>
                 <div className={cls.layout}>
                     <aside className={cls.sidebar}>
-                        <div className={cls.metricCard}><Star /> {data.rank ?? '—'} Highest Rated</div>
-                        <div className={cls.metricCard}><Heart /> {data.popularity ?? '—'} Most Popular</div>
+                        <div className={cls.metricCard}><Trophy /> {data.popularity ?? "—"} Most Popular</div>
+                        <div className={cls.metricCard}><Star /> {data.rank ?? "—"} Highest Rated</div>
+
                         <ul className={cls.infoList}>
-                            <li><strong>Airing: </strong> Ep {data.episodes ?? '—'}</li>
-                            <li><strong>Duration: </strong> {data.duration ?? '—'}</li>
-                            <li><strong>Source:</strong> {data.source ?? '—'}</li>
-                            <li><strong>Season / Year:</strong> {data.season ?? '—'} {data.year ?? ''}</li>
-                            <li><strong>Aired:</strong> {formatDate(data.aired?.from)} — {formatDate(data.aired?.to)}</li>
-                            <li><strong>Broadcast:</strong> {data.broadcast?.string ?? '—'}</li>
-                            <li><strong>Rating:</strong> {data.rating ?? '—'}</li>
+                            <li><strong>Airing: </strong> Ep {data.episodes ?? "—"}</li>
+                            <li><strong>Duration: </strong> {data.duration ?? "—"}</li>
+                            <li><strong>Source:</strong> {data.source ?? "—"}</li>
+                            <li><strong>Season / Year:</strong> {data.season ?? "—"} {data.year ?? ""}</li>
+                            <li><strong>Aired:</strong> {formatDate((data.aired as any)?.from)} — {formatDate((data.aired as any)?.to)}</li>
+                            <li><strong>Broadcast:</strong> {data.broadcast?.string ?? "—"}</li>
+                            <li><strong>Rating:</strong> {data.rating ?? "—"}</li>
                             <li><strong>Genres:</strong> {joinNames(data.genres)}</li>
                             <li><strong>Studios:</strong> {joinNames(data.studios)}</li>
                             <li><strong>Producers:</strong> {joinNames(data.producers)}</li>
-                            <li><strong>Themes:</strong> {joinNames(data.themes)}</li>
-                            <li><strong>Demographics:</strong> {joinNames(data.demographics)}</li>
                         </ul>
                     </aside>
 
                     <div className={cls.mainColumn}>
-                        <section className={cls.section}>
-                            <h3 style={{ color: '#fff', marginBottom: 12 }}>Pictures</h3>
-
-                            {pictures && pictures.length > 0 ? (
-                                <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-                                    {pictures.map((pic, idx) => {
-                                        const url =
-                                            typeof pic === 'string'
-                                                ? pic
-                                                : pic?.jpg?.image_url ||
-                                                pic?.image_url ||
-                                                pic?.jpg?.large_image_url ||
-                                                pic?.webp?.image_url ||
-                                                pic?.large_image_url ||
-                                                '';
-
-                                        const caption = (pic && (pic.title || pic.caption || pic?.meta || '')) || '';
-
-                                        return (
-                                            <div key={pic?.id ?? pic?.image_url ?? url ?? idx} style={{ width: 200 }}>
-                                                {url ? (
-                                                    <img
-                                                        src={url}
-                                                        alt={caption || `picture-${idx}`}
-                                                        style={{
-                                                            width: '100%',
-                                                            height: 120,
-                                                            objectFit: 'cover',
-                                                            borderRadius: 8,
-                                                            border: '1px solid rgba(255,255,255,0.03)'
-                                                        }}
-                                                    />
-                                                ) : (
-                                                    <div style={{
-                                                        width: '100%',
-                                                        height: 120,
-                                                        borderRadius: 8,
-                                                        background: 'rgba(255,255,255,0.02)',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        color: 'rgba(255,255,255,0.6)'
-                                                    }}>
-                                                        No preview
+                        {activeSection === "overview" && (
+                            <>
+                                <section className={cls.section}>
+                                    <SectionHeader title="Pictures" />
+                                    {pictures.length > 0 ? (
+                                        <div className={cls.picturesRow}>
+                                            {pictures.map((pic: any, idx: number) => {
+                                                const url = typeof pic === "string" ? pic : pic?.jpg?.image_url || pic?.image_url || pic?.jpg?.large_image_url || pic?.webp?.image_url || pic?.large_image_url || "";
+                                                const caption = pic?.title || pic?.caption || data.title || "";
+                                                const key = pic?.id ?? (url ? `pic-${encodeURIComponent(String(url))}` : `pic-${idx}`);
+                                                return (
+                                                    <div key={String(key)} className={cls.pictureItem}>
+                                                        {url ? (
+                                                            <div className={cls.zoomContainer} onClick={() => openImageModal(url, caption)}>
+                                                                <img
+                                                                    src={url}
+                                                                    alt={caption || `picture-${idx}`}
+                                                                    className={cls.pictureImg}
+                                                                />
+                                                                <div className={cls.zoomOverlay}><Search /></div>
+                                                            </div>
+                                                        ) : (
+                                                            <div className={cls.picturePlaceholder}>No preview</div>
+                                                        )}
+                                                        {caption ? <div className={cls.pictureCaption}>{caption}</div> : null}
                                                     </div>
-                                                )}
-                                                {caption ? <div style={{ color: 'rgba(255,255,255,0.75)', marginTop: 8, fontSize: 13 }}>{caption}</div> : null}
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            ) : (
-                                <div style={{ color: 'rgba(255,255,255,0.7)' }}>
-                                    No pictures available. <br />
-                                    <pre style={{ color: 'rgba(255,255,255,0.5)', whiteSpace: 'pre-wrap', marginTop: 8 }}>
-                    {JSON.stringify(picturesData, null, 2)}
-                  </pre>
-                                </div>
-                            )}
-                        </section>
+                                                );
+                                            })}
+                                        </div>
+                                    ) : <div className={cls.empty}>No pictures available.</div>}
+                                </section>
 
-                        {data.relations && data.relations.length > 0 && (
-                            <div>
-                                <h3 style={{ color: '#fff', marginBottom: 12 }}>Relations</h3>
-                                <div className={cls.relationsRow}>
-                                    {data.relations.map((rel) =>
-                                        rel.entry.map((e: any) => (
-                                            <div className={cls.relationCard} key={e.mal_id}>
-                                                {/* e.image_url может отсутствовать — используем poster как fallback */}
-                                                <img className={cls.relThumb} src={e.image_url || poster} alt={e.name} />
-                                                <div>
-                                                    <div style={{ fontWeight: 700 }}>{e.name}</div>
-                                                    <div style={{ color: 'rgba(255,255,255,0.7)' }}>{rel.relation} • {e.type}</div>
-                                                </div>
-                                            </div>
-                                        ))
-                                    )}
-                                </div>
-                            </div>
+                                <section className={cls.section}>
+                                    <SectionHeader title="Characters" onShowAll={() => setActiveSection("characters")} />
+                                    <div className={cls.charactersGrid}>
+                                        {previewChars.length > 0 ? previewChars.map((c: any, idx: number) => {
+                                            const charObj = c.character || c;
+                                            const key = charObj?.mal_id ?? charObj?.id ?? `char-${charObj?.name ?? idx}-${idx}`;
+                                            return <CharacterCard key={String(key)} c={c} posterFallback={poster} />;
+                                        }) : <div className={cls.empty}>Characters data not available.</div>}
+                                    </div>
+                                </section>
+
+                                {(embedSrc || watchUrl) && (
+                                    <section className={cls.section}>
+                                        <SectionHeader title="Trailer" />
+                                        <div className={cls.trailerFrame}>
+                                            {embedSrc ? <iframe title="trailer" src={embedSrc} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen /> : <a href={watchUrl || trailerRaw || "#"} target="_blank" rel="noreferrer" className={cls.trailerLink}><Play /> Watch trailer</a>}
+                                        </div>
+                                    </section>
+                                )}
+
+                                <section className={cls.section}>
+                                    <SectionHeader title="Staff" onShowAll={() => setActiveSection("staff")} />
+                                    <div className={cls.staffRow}>
+                                        {previewStaff.map((s: any, idx: number) => {
+                                            const person = s.person || s;
+                                            const key = person?.mal_id ?? person?.id ?? `staff-${person?.name ?? idx}-${idx}`;
+                                            return <StaffCard key={String(key)} s={s} posterFallback={poster} />;
+                                        })}
+                                        {previewStaff.length === 0 && <div className={cls.empty}>No staff available.</div>}
+                                    </div>
+                                </section>
+                            </>
                         )}
 
-                        <div>
-                            <h3 style={{ color: '#fff', marginBottom: 12 }}>Characters</h3>
-                            <div className={cls.charactersGrid}>
-                                {/* сюда можно вывести data.characters если есть */}
-                            </div>
-                        </div>
+                        {activeSection === "characters" && (
+                            <section className={cls.section}>
+                                <SectionHeader title="All Characters" />
+                                <div className={cls.modalList}>
+                                    {allCharacters.length > 0 ? allCharacters.map((c: any, idx: number) => {
+                                        const charObj = c.character || c;
+                                        const name = charObj?.name || `Character ${idx}`;
+                                        const thumb = pickImage(charObj, poster);
+                                        const role = c.role || charObj?.role || "";
+                                        const vas = c.voice_actors || [];
+                                        const key = charObj?.mal_id ?? charObj?.id ?? `char-all-${idx}-${name}`;
+                                        return (
+                                            <div className={cls.modalListItem} key={String(key)}>
+                                                <div className={cls.zoomContainer} onClick={() => openImageModal(thumb, name)}>
+                                                    <img src={thumb} alt={name} className={cls.modalListThumb} />
+                                                    <div className={cls.zoomOverlay}><Search /></div>
+                                                </div>
+                                                <div>
+                                                    <div style={{ fontWeight: 700 }}>{name}</div>
+                                                    <div style={{ color: "rgba(255,255,255,0.7)" }}>{role}</div>
+                                                    {vas.length > 0 && <div style={{ color: "rgba(255,255,255,0.6)", marginTop: 6 }}>{vas.map((v: any) => v.person?.name || v.name).join(", ")}</div>}
+                                                </div>
+                                            </div>
+                                        );
+                                    }) : <div className={cls.empty}>No characters available.</div>}
+                                </div>
+                            </section>
+                        )}
 
-                        <div>
-                            <h3 style={{ color: '#fff', marginBottom: 12 }}>Recomendation</h3>
-                            <div className={cls.charactersGrid}>
-                                {/* сюда можно вывести data.characters если есть */}
-                            </div>
-                        </div>
-
+                        {activeSection === "staff" && (
+                            <section className={cls.section}>
+                                <SectionHeader title="All Staff" />
+                                <div className={cls.modalList}>
+                                    {staff.length > 0 ? staff.map((s: any, idx: number) => {
+                                        const person = s.person || s;
+                                        const name = person?.name || s.name || `Staff ${idx}`;
+                                        const img = pickImage(person, poster);
+                                        const pos = s.positions?.join?.(", ") ?? s.role ?? "—";
+                                        const key = person?.mal_id ?? person?.id ?? `staff-all-${idx}-${name}`;
+                                        return (
+                                            <div className={cls.modalListItem} key={String(key)}>
+                                                <div className={cls.zoomContainer} onClick={() => openImageModal(img, name)}>
+                                                    <img src={img} alt={name} className={cls.modalListThumb} />
+                                                    <div className={cls.zoomOverlay}><Search /></div>
+                                                </div>
+                                                <div>
+                                                    <div style={{ fontWeight: 700 }}>{name}</div>
+                                                    <div style={{ color: "rgba(255,255,255,0.7)" }}>{pos}</div>
+                                                </div>
+                                            </div>
+                                        );
+                                    }) : <div className={cls.empty}>No staff available.</div>}
+                                </div>
+                            </section>
+                        )}
                     </div>
                 </div>
             </main>
 
-            <footer className={cls.footer}>{isFetching ? <small>Обновление...</small> : null}</footer>
+            {isImageModalOpen && modalImageSrc && (
+                <div
+                    className={cls.imageModal}
+                    role="dialog"
+                    aria-modal="true"
+                    onClick={(e) => {
+                        if (e.target === e.currentTarget) closeImageModal();
+                    }}
+                >
+                    <div className={cls.imageModalInner}>
+                        <button className={cls.imageModalClose} onClick={closeImageModal} aria-label="Close image">✕</button>
+                        <img src={modalImageSrc} alt={modalImageCaption ?? "image"} className={cls.imageModalImg} />
+                        {modalImageCaption && <div className={cls.imageModalCaption}>{modalImageCaption}</div>}
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

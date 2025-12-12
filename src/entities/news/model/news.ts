@@ -1,5 +1,3 @@
-
-
 export interface News {
     mal_id: number,
     url: string,

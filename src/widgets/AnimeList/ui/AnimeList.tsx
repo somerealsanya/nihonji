@@ -1,7 +1,7 @@
 import React from "react";
 import cls from "./AnimeList.module.scss";
-import { AnimeCard } from "../../../entities/anime";
-import type { Anime } from "../../../entities/anime/model/anime";
+import { AnimeCard } from "entities/anime";
+import type { Anime } from "entities/anime/model/anime";
 import {Link} from "react-router";
 
 type Props = {

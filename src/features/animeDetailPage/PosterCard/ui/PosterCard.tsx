@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import cls from "./PosterCard.module.scss";
 import { Heart, Search } from "lucide-react";
-import AddToListButton from "../addToListButton/AddToListButton";
+import AddToListButton from "../../addToListButton/ui/AddToListButton.tsx";
 
 type Props = {
     poster?: string;

@@ -1,12 +1,11 @@
-// src/pages/PopularPage/PopularPage.tsx
 import React, { useEffect, useRef, useState } from "react";
 import cls from "./PopularPage.module.scss";
-import { classNames } from "../../../shared/lib/classNames/classNames";
-import { AnimeList } from "../../../widgets/AnimeList";
-import { ListHeader } from "../../../shared/ui/ListHeader";
-import { useGetAnimeQuery } from "../../../entities/anime/api/animeApi";
-import { Loader } from "../../../shared/ui/Loader";
-import type { Anime } from "../../../entities/anime/model/anime";
+import { classNames } from "shared/lib/classNames/classNames";
+import { AnimeList } from "widgets/AnimeList";
+import { ListHeader } from "shared/ui/ListHeader";
+import { useGetAnimeQuery } from "entities/anime/api/animeApi";
+import { Loader } from "shared/ui/Loader";
+import type { Anime } from "entities/anime/model/anime";
 
 interface PopularPageProps {
     className?: string;

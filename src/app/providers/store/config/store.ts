@@ -1,6 +1,6 @@
 import {configureStore} from "@reduxjs/toolkit";
 import {rootReducer} from "./rootReducer.ts";
-import {jikanApi} from "../../../../shared/api/jikanApi.ts";
+import {jikanApi} from "shared/api/jikanApi.ts";
 
 export const setupStore = () => {
     return configureStore({

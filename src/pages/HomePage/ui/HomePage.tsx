@@ -1,12 +1,12 @@
 import React from "react";
-import { Intro } from "../../../features/homePage/intro";
+import { Intro } from "features/homePage/intro";
 import cls from "./HomePage.module.scss";
-import { Popular } from "../../../features/homePage/popular";
-import { Novelty } from "../../../features/homePage/novelty";
-import { AllTimeFavorites } from "../../../features/homePage/AllTimeFavorites";
-import { News } from "../../../features/homePage/news";
-import { useGetAnimeQuery } from "../../../entities/anime/api/animeApi";
-import { Loader } from "../../../shared/ui/Loader";
+import { Popular } from "features/homePage/popular";
+import { Novelty } from "features/homePage/novelty";
+import { AllTimeFavorites } from "features/homePage/allTimeFavorites";
+import { News } from "features/homePage/news";
+import { useGetAnimeQuery } from "entities/anime/api/animeApi";
+import { Loader } from "shared/ui/Loader";
 
 const HomePage: React.FC = () => {
     const {

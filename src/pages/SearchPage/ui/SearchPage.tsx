@@ -1,11 +1,11 @@
 import React, { useEffect,  useRef, useState } from "react";
 import cls from "./SearchPage.module.scss";
-import type {Anime} from "../../../entities/anime/model/anime.ts";
-import {useGetAnimeQuery} from "../../../entities/anime/api/animeApi.ts";
-import {classNames} from "../../../shared/lib/classNames/classNames.ts";
-import {Loader} from "../../../shared/ui/Loader";
-import {AnimeList} from "../../../widgets/AnimeList";
-import {SearchInput} from "../../../shared/ui/SearchInput/ui/SearchInput.tsx";
+import type {Anime} from "entities/anime/model/anime.ts";
+import {useGetAnimeQuery} from "entities/anime/api/animeApi.ts";
+import {classNames} from "shared/lib/classNames/classNames.ts";
+import {Loader} from "shared/ui/Loader";
+import {AnimeList} from "widgets/AnimeList";
+import {SearchInput} from "shared/ui/SearchInput/ui/SearchInput.tsx";
 
 interface SearchPageProps {
     className?: string;

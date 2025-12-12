@@ -1,4 +1,4 @@
-import {jikanApi} from "../../../shared/api/jikanApi.ts";
+import {jikanApi} from "shared/api/jikanApi.ts";
 import type {News} from "../model/news.ts";
 
 

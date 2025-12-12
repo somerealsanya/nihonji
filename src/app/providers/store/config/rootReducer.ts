@@ -1,5 +1,5 @@
 import {combineReducers} from "@reduxjs/toolkit";
-import {jikanApi} from "../../../../shared/api/jikanApi.ts";
+import {jikanApi} from "shared/api/jikanApi.ts";
 
 
 export const rootReducer = combineReducers({

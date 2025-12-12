@@ -1,8 +1,8 @@
 import cls from "./NewsPage.module.scss";
-import { classNames } from "../../../shared/lib/classNames/classNames";
-import { Loader } from "../../../shared/ui/Loader";
-import { useMultiAnimeNews } from "../../../entities/news/hooks/useMultiAnimeNews";
-import {ANIME_IDS} from "../../../shared/config/newsConfig/newsIds.ts";
+import { classNames } from "shared/lib/classNames/classNames";
+import { Loader } from "shared/ui/Loader";
+import { useMultiAnimeNews } from "entities/news/hooks/useMultiAnimeNews";
+import {ANIME_IDS} from "shared/config/newsConfig/newsIds.ts";
 
 interface NewsPageProps {
     className?: string;

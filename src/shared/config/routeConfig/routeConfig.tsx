@@ -1,12 +1,12 @@
 import type { RouteProps } from "react-router-dom";
-import {HomePage} from "../../../pages/HomePage";
-import {CatalogPage} from "../../../pages/CatalogPage";
+import {HomePage} from "pages/HomePage";
+import {CatalogPage} from "pages/CatalogPage";
 import { AppRoutes, routePaths } from "./routes.ts";
-import {NoveltyPage} from "../../../pages/NoveltyPage";
-import {PopularPage} from "../../../pages/PopularPage";
-import {AnimeDetailPage} from "../../../pages/AnimeDetailPage";
-import {SearchPage} from "../../../pages/SearchPage";
-import {NewsPage} from "../../../pages/NewsPage/ui/NewsPage.tsx";
+import {NoveltyPage} from "pages/NoveltyPage";
+import {PopularPage} from "pages/PopularPage";
+import {AnimeDetailPage} from "pages/AnimeDetailPage";
+import {SearchPage} from "pages/SearchPage";
+import {NewsPage} from "pages/NewsPage/ui/NewsPage.tsx";
 
 
 export const routeConfig: Record<AppRoutes, RouteProps> = {

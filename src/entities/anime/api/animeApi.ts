@@ -1,4 +1,4 @@
-import { jikanApi } from "../../../shared/api/jikanApi";
+import { jikanApi } from "shared/api/jikanApi";
 import type {
     Anime,
     AnimeCharacter,

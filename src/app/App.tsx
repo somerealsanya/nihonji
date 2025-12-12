@@ -3,7 +3,7 @@ import {Suspense} from "react";
 import {Loader} from "../shared/ui/Loader";
 import {Header} from "../widgets/Header";
 import './styles/index.scss';
-import {Footer} from "../widgets/Footer";
+import {Footer} from "widgets/Footer";
 
 
 function App() {

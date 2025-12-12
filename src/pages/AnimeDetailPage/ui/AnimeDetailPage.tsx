@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import cls from "./AnimeDetailPage.module.scss";
-import { classNames } from "../../../shared/lib/classNames/classNames.ts";
+import { classNames } from "shared/lib/classNames/classNames.ts";
 import { useParams } from "react-router";
 import { Navigate } from "react-router-dom";
 import {
@@ -8,17 +8,17 @@ import {
     useGetAnimeCharactersQuery,
     useGetAnimePictureQuery,
     useGetAnimeStaffQuery,
-} from "../../../entities/anime/api/animeApi.ts";
-import { Loader } from "../../../shared/ui/Loader";
+} from "entities/anime/api/animeApi.ts";
+import { Loader } from "shared/ui/Loader";
 import {Star, Trophy, Play, Search} from "lucide-react";
 
-import type { AnimeCharacter, AnimeStaff } from "../../../entities/anime/model/anime";
-import { toYouTubeEmbedUrl, toYouTubeWatchUrl, formatDate, joinNames, pickImage } from "../../../shared/utils/animeHelpers";
+import type { AnimeCharacter, AnimeStaff } from "anime/model/anime";
+import { toYouTubeEmbedUrl, toYouTubeWatchUrl, formatDate, joinNames, pickImage } from "shared/utils/animeHelpers";
 
-import PosterCard from "./PosterCard/PosterCard.tsx";
-import SectionHeader from "./SectionHeader/SectionHeader";
-import CharacterCard from "./CharacterCard/CharacterCard";
-import StaffCard from "./StaffCard/StaffCard";
+import {PosterCard} from "features/animeDetailPage/PosterCard";
+import {SectionHeader} from "features/animeDetailPage/SectionHeader";
+import {CharacterCard} from "features/animeDetailPage/CharacterCard";
+import {StaffCard} from "features/animeDetailPage/StaffCard";
 
 type ViewSection = "overview" | "characters" | "staff";
 

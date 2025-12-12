@@ -7,6 +7,8 @@ import {PopularPage} from "pages/PopularPage";
 import {AnimeDetailPage} from "pages/AnimeDetailPage";
 import {SearchPage} from "pages/SearchPage";
 import {NewsPage} from "pages/NewsPage/ui/NewsPage.tsx";
+import RegisterPage from "pages/Registration/ui/RegistrationPage.tsx";
+import Registration from "pages/Registration/ui/RegistrationPage.tsx";
 
 
 export const routeConfig: Record<AppRoutes, RouteProps> = {
@@ -37,5 +39,9 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
     [AppRoutes.NEWS]: {
         path: routePaths[AppRoutes.NEWS],
         element: <NewsPage />
+    },
+    [AppRoutes.REGISTRATION]: {
+        path: routePaths[AppRoutes.REGISTRATION],
+        element: <Registration />
     }
 }

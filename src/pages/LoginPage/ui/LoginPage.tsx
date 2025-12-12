@@ -7,7 +7,6 @@ export const LoginPage: React.FC = () => {
     const { login } = useAuth();
 
     const handleLogin = async ({ email, password }: { email: string; password: string }) => {
-        // предполагается, что useAuth.login выбрасывает ошибку при неудаче
         await login(email, password);
     };
 

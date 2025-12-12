@@ -1,4 +1,4 @@
-import AppRouter from "./providers/router/ui/AppRouter.tsx";
+import AppRouter from "./providers/router/ui/AppRouter/AppRouter.tsx";
 import {Suspense} from "react";
 import {Loader} from "../shared/ui/Loader";
 import {Header} from "../widgets/Header";

@@ -1,4 +1,3 @@
-import type { RouteProps } from "react-router-dom";
 import {HomePage} from "pages/HomePage";
 import {CatalogPage} from "pages/CatalogPage";
 import { AppRoutes, routePaths } from "./routes.ts";
@@ -9,43 +8,60 @@ import {SearchPage} from "pages/SearchPage";
 import {NewsPage} from "pages/NewsPage/ui/NewsPage.tsx";
 import {RegistrationPage} from "pages/RegistrationPage";
 import {LoginPage} from "pages/LoginPage";
+import type {RouteConfig} from "shared/config/routeConfig/types.ts";
 
 
-export const routeConfig: Record<AppRoutes, RouteProps> = {
+export const routeConfig: RouteConfig = {
     [AppRoutes.HOME]: {
+        routeKey: AppRoutes.HOME,
         path: routePaths[AppRoutes.HOME],
-        element: <HomePage />
+        element: <HomePage />,
+        authOnly: true,
     },
     [AppRoutes.CATALOG]: {
+        routeKey: AppRoutes.CATALOG,
         path: routePaths[AppRoutes.CATALOG],
-        element: <CatalogPage />
+        element: <CatalogPage />,
+        authOnly: true,
     },
     [AppRoutes.NOVELTY]: {
+        routeKey: AppRoutes.NOVELTY,
         path: routePaths[AppRoutes.NOVELTY],
-        element: <NoveltyPage />
+        element: <NoveltyPage />,
+        authOnly: true,
     },
     [AppRoutes.POPULAR]: {
+        routeKey: AppRoutes.POPULAR,
         path: routePaths[AppRoutes.POPULAR],
-        element: <PopularPage />
+        element: <PopularPage />,
+        authOnly: true,
     },
     [AppRoutes.ANIME_DETAIL_PAGE]: {
+        routeKey: AppRoutes.ANIME_DETAIL_PAGE,
         path: routePaths[AppRoutes.ANIME_DETAIL_PAGE],
-        element: <AnimeDetailPage  />
+        element: <AnimeDetailPage />,
+        authOnly: true,
     },
     [AppRoutes.SEARCH]: {
+        routeKey: AppRoutes.SEARCH,
         path: routePaths[AppRoutes.SEARCH],
-        element: <SearchPage  />
+        element: <SearchPage />,
+        authOnly: true,
     },
     [AppRoutes.NEWS]: {
+        routeKey: AppRoutes.NEWS,
         path: routePaths[AppRoutes.NEWS],
-        element: <NewsPage />
+        element: <NewsPage />,
+        authOnly: true,
     },
     [AppRoutes.REGISTRATION]: {
+        routeKey: AppRoutes.REGISTRATION,
         path: routePaths[AppRoutes.REGISTRATION],
-        element: <RegistrationPage />
+        element: <RegistrationPage />,
     },
     [AppRoutes.LOGIN]: {
+        routeKey: AppRoutes.LOGIN,
         path: routePaths[AppRoutes.LOGIN],
-        element: <LoginPage />
-    }
-}
+        element: <LoginPage />,
+    },
+};

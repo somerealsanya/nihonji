@@ -1,6 +1,6 @@
 import {Swiper} from "swiper/react";
 import {Navigation} from "swiper/modules";
-import {classNames} from "../../../lib/classNames/classNames.ts";
+import { classNames } from "shared/lib/classNames/classNames";
 import {type ReactNode, useRef, useState} from "react";
 import cls from "./SwiperBlock.module.scss"
 

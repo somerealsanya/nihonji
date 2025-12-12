@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import useDebouncedValue from "../../../../app/hooks/useDebounceValue.ts";
+import useDebouncedValue from "app/hooks/useDebounceValue.ts";
 import cls from "./SearchInput.module.scss";
 import {Search} from "lucide-react";
 
@@ -17,7 +17,6 @@ export const SearchInput: React.FC<SearchInputProps> = ({
                                                             placeholder = "Поиск...",
                                                             initialValue = "",
                                                             debounceMs = 500,
-                                                            className,
                                                             onChange,
                                                             onDebounced,
                                                             clearable = true,

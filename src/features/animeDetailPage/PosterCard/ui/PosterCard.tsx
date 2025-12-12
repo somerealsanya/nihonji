@@ -1,7 +1,7 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import cls from "./PosterCard.module.scss";
 import { Heart, Search } from "lucide-react";
-import AddToListButton from "../addToListButton/AddToListButton";
+import AddToListButton from "../../addToListButton/ui/AddToListButton.tsx";
 
 type Props = {
     poster?: string;
@@ -12,10 +12,38 @@ type Props = {
 };
 
 export const PosterCard: React.FC<Props> = ({ poster, title, animeId, onOpenImage, className }) => {
+    const myLikeAnime = `myLikeAnime:${animeId}`;
+    const [isLike, setIsLike] = useState(false);
+
+    useEffect(() => {
+        try {
+            const save = localStorage.getItem(myLikeAnime);
+            setIsLike(Boolean(save === "1"));
+        } catch {
+            setIsLike(false);
+        }
+    }, [myLikeAnime]);
+
     const handleClick = (e?: React.MouseEvent) => {
         e?.stopPropagation();
         if (!poster) return;
         onOpenImage?.(poster, title ?? null);
+    };
+
+    const handleLike = (e?: React.MouseEvent) => {
+        e?.stopPropagation();
+
+        try {
+            if (isLike) {
+                localStorage.removeItem(myLikeAnime);
+                setIsLike(false);
+            } else {
+                localStorage.setItem(myLikeAnime, "1");
+                setIsLike(true);
+            }
+        } catch {
+            setIsLike((v) => !v);
+        }
     };
 
     return (
@@ -32,7 +60,6 @@ export const PosterCard: React.FC<Props> = ({ poster, title, animeId, onOpenImag
                     <div className={cls.placeholder}>No image</div>
                 )}
 
-                {/* overlay (лупа) */}
                 <div className={cls.zoomOverlay}>
                     <Search />
                 </div>
@@ -40,7 +67,15 @@ export const PosterCard: React.FC<Props> = ({ poster, title, animeId, onOpenImag
 
             <div className={cls.actions}>
                 <AddToListButton animeId={animeId} />
-                <button className={cls.like} aria-label="Like"><Heart /></button>
+                <button
+                    className={`${cls.like} ${isLike ? cls.liked : ""}`}
+                    aria-pressed={isLike}
+                    aria-label={isLike ? "Unfavorite" : "Like"}
+                    onClick={handleLike}
+                    type="button"
+                >
+                    <Heart />
+                </button>
             </div>
         </div>
     );

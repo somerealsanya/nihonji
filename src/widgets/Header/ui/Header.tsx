@@ -1,6 +1,6 @@
 import {Link} from "react-router";
 import cls from './Header.module.scss';
-import {Bookmark, Minimize, Moon, Search} from "lucide-react";
+import {Minimize, Moon, Search} from "lucide-react";
 
 
 const Header = () => {
@@ -21,7 +21,6 @@ const Header = () => {
                 <div className={cls.right}>
                     <div className={cls.toggles}>
                         <Link to="/search" className={cls.toggleTheme}><Search /></Link>
-                        <Link to="/catalog" className={cls.toggleTheme}><Bookmark /></Link>
                         <button className={cls.toggleLang}>RU</button>
                         <button className={cls.toggleTheme}>
                             <Moon />

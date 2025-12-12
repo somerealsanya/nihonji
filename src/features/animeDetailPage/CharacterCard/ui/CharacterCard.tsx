@@ -1,7 +1,7 @@
 import React from "react";
 import cls from "./CharacterCard.module.scss";
-import type { AnimeCharacter } from "../../../../entities/anime/model/anime";
-import { pickImage } from "../../../../shared/utils/animeHelpers";
+import type { AnimeCharacter } from "entities/anime/model/anime.ts";
+import { pickImage } from "shared/utils/animeHelpers.ts";
 
 type Props = {
     c: AnimeCharacter | any;
@@ -41,4 +41,3 @@ export const CharacterCard: React.FC<Props> = ({ c, posterFallback, onOpenImage 
     );
 };
 
-export default CharacterCard;

@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import cls from "./CatalogPage.module.scss";
-import type { Anime } from "../../../entities/anime/model/anime.ts";
-import { useGetAnimeQuery } from "../../../entities/anime/api/animeApi.ts";
-import { classNames } from "../../../shared/lib/classNames/classNames.ts";
-import { Loader } from "../../../shared/ui/Loader";
-import { AnimeList } from "../../../widgets/AnimeList";
-import { ListHeader } from "../../../shared/ui/ListHeader";
-import {SearchInput} from "../../../shared/ui/SearchInput/ui/SearchInput.tsx";
+import type { Anime } from "entities/anime/model/anime.ts";
+import { useGetAnimeQuery } from "entities/anime/api/animeApi.ts";
+import { classNames } from "shared/lib/classNames/classNames.ts";
+import { Loader } from "shared/ui/Loader";
+import { AnimeList } from "widgets/AnimeList";
+import { ListHeader } from "shared/ui/ListHeader";
+import {SearchInput} from "shared/ui/SearchInput/ui/SearchInput.tsx";
 
 const PAGE_LIMIT = 24;
 

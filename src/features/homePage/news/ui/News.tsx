@@ -1,8 +1,8 @@
 import cls from './News.module.scss';
-import { classNames } from "../../../../shared/lib/classNames/classNames";
+import { classNames } from "shared/lib/classNames/classNames";
 import { Link } from "react-router";
-import { useMultiAnimeNews } from "../../../../entities/news/hooks/useMultiAnimeNews";
-import { ANIME_IDS } from "../../../../shared/config/newsConfig/newsIds";
+import { useMultiAnimeNews } from "entities/news/hooks/useMultiAnimeNews";
+import { ANIME_IDS } from "shared/config/newsConfig/newsIds";
 
 interface NewsProps {
     className?: string;

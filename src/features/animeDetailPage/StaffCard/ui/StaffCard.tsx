@@ -1,7 +1,7 @@
 import React from "react";
 import cls from "./StaffCard.module.scss";
-import type { AnimeStaff } from "../../../../entities/anime/model/anime";
-import { pickImage } from "../../../../shared/utils/animeHelpers";
+import type { AnimeStaff } from "entities/anime/model/anime.ts";
+import { pickImage } from "shared/utils/animeHelpers.ts";
 
 type Props = {
     s: AnimeStaff | any;

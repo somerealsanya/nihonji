@@ -1,4 +1,4 @@
-import {classNames} from "../../../lib/classNames/classNames.ts";
+import { classNames } from "shared/lib/classNames/classNames";
 import {ArrowDownWideNarrow, ArrowUpWideNarrow, SlidersHorizontal} from "lucide-react";
 import cls from "./ListHeader.module.scss";
 

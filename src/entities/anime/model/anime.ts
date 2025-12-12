@@ -1,4 +1,3 @@
-// src/entities/anime/types.ts
 export interface ImageSet {
     image_url?: string;
     small_image_url?: string;

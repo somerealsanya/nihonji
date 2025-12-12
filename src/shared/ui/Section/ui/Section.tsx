@@ -1,6 +1,6 @@
 import cls from "./Section.module.scss";
-import {classNames} from "../../../lib/classNames/classNames.ts";
 import type {ReactNode} from "react";
+import { classNames } from "shared/lib/classNames/classNames";
 
 interface SectionProps {
     title: string;

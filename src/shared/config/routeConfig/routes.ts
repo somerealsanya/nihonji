@@ -7,7 +7,8 @@ export const AppRoutes  = {
     ANIME_DETAIL_PAGE: 'anime-detail-page',
     SEARCH: 'search',
     NEWS: 'news',
-    REGISTRATION: 'registration'
+    REGISTRATION: 'registration',
+    LOGIN: 'login'
 } as const;
 
 export type AppRoutes = typeof AppRoutes[keyof typeof AppRoutes];
@@ -20,6 +21,7 @@ export const routePaths: Record<AppRoutes, string> = {
     [AppRoutes.ANIME_DETAIL_PAGE]: '/anime/:id',
     [AppRoutes.SEARCH]: '/search',
     [AppRoutes.NEWS]: '/news',
-    [AppRoutes.REGISTRATION]: '/registration'
+    [AppRoutes.REGISTRATION]: '/registration',
+    [AppRoutes.LOGIN]: '/login'
 }
 

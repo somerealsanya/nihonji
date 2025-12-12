@@ -53,7 +53,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             await registerWithEmail(email, password);
         } catch (err: any) {
-            setError(err.message || "Registration failed");
+            setError(err.message || "RegistrationPage failed");
             throw err;
         } finally {
             setLoading(false);

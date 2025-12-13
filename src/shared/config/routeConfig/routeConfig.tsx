@@ -9,6 +9,7 @@ import {NewsPage} from "pages/NewsPage/ui/NewsPage.tsx";
 import {RegistrationPage} from "pages/RegistrationPage";
 import {LoginPage} from "pages/LoginPage";
 import type {RouteConfig} from "shared/config/routeConfig/types.ts";
+import {ProfilePage} from "pages/ProfilePage";
 
 
 export const routeConfig: RouteConfig = {
@@ -64,4 +65,9 @@ export const routeConfig: RouteConfig = {
         path: routePaths[AppRoutes.LOGIN],
         element: <LoginPage />,
     },
+    [AppRoutes.PROFILE]: {
+        routeKey: AppRoutes.PROFILE,
+        path: routePaths[AppRoutes.PROFILE],
+        element: <ProfilePage />
+    }
 };

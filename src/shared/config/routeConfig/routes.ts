@@ -8,7 +8,8 @@ export const AppRoutes  = {
     SEARCH: 'search',
     NEWS: 'news',
     REGISTRATION: 'registration',
-    LOGIN: 'login'
+    LOGIN: 'login',
+    PROFILE: 'profile'
 } as const;
 
 export type AppRoutes = typeof AppRoutes[keyof typeof AppRoutes];
@@ -22,6 +23,7 @@ export const routePaths: Record<AppRoutes, string> = {
     [AppRoutes.SEARCH]: '/search',
     [AppRoutes.NEWS]: '/news',
     [AppRoutes.REGISTRATION]: '/registration',
-    [AppRoutes.LOGIN]: '/login'
+    [AppRoutes.LOGIN]: '/login',
+    [AppRoutes.PROFILE]: '/profile'
 }
 

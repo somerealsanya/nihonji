@@ -3,7 +3,7 @@ import cls from "./NoveltyPage.module.scss";
 import { classNames } from "shared/lib/classNames/classNames";
 import { AnimeList } from "widgets/AnimeList";
 import { ListHeader } from "shared/ui/ListHeader";
-import { useGetAnimeQuery } from "entities/anime/api/animeApi";
+import {type GetAnimeArgs, useGetAnimeQuery} from "entities/anime/api/animeApi";
 import { Loader } from "shared/ui/Loader";
 import type { Anime } from "entities/anime/model/anime";
 
@@ -16,9 +16,15 @@ const PAGE_LIMIT = 24;
 export const NoveltyPage: React.FC<NoveltyPageProps> = ({ className }) => {
     const [page, setPage] = useState(1);
     const [allItems, setAllItems] = useState<Anime[]>([]);
-    const [sortBool, setSortBool] = useState("asc");
+    const [sortBool, setSortBool] = useState<"asc" | "desc">("asc");
     const sentinelRef = useRef<HTMLDivElement | null>(null);
     const observerRef = useRef<IntersectionObserver | null>(null);
+    const [filters, setFilters] = useState<GetAnimeArgs>({
+        type: undefined,
+        status: undefined,
+        sfw: true,
+        sort: "desc",
+    });
 
     const {
         data: rawData,
@@ -27,10 +33,9 @@ export const NoveltyPage: React.FC<NoveltyPageProps> = ({ className }) => {
         isFetching,
     } = useGetAnimeQuery(
         {
-            status: "airing",
+            ...filters,
             order_by: "popularity",
             sort: sortBool,
-            sfw: true,
             page,
             limit: PAGE_LIMIT,
         },
@@ -40,7 +45,7 @@ export const NoveltyPage: React.FC<NoveltyPageProps> = ({ className }) => {
     useEffect(() => {
         setPage(1);
         setAllItems([]);
-    }, [sortBool]);
+    }, [sortBool, filters]);
 
     useEffect(() => {
         if (!rawData || !Array.isArray(rawData)) {
@@ -119,9 +124,15 @@ export const NoveltyPage: React.FC<NoveltyPageProps> = ({ className }) => {
     return (
         <div className={classNames(cls.NoveltyPage, {}, [className])}>
             <div className="container">
-                <ListHeader title="Онгоинги" sortName={
-                    sortBool === "asc" ? "Сначала старые" : "Сначала новые"
-                } sortBool={sortBool} setSortBool={setSortBool}/>
+                <ListHeader
+                    title="Онгоинги"
+                    sortName={sortBool === "asc" ? "Сначала старые" : "Сначала новые"}
+                    sortBool={sortBool}
+                    setSortBool={setSortBool}
+                    onApply={setFilters}
+                    value={filters}
+                />
+
 
                 {isLoading && (
                     <div className={cls.center}>

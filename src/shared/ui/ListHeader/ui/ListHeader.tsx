@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 import cls from "./ListHeader.module.scss";
 import { useEffect, useRef, useState } from "react";
-
+import {type GetAnimeArgs} from "entities/anime/api/animeApi.ts";
 
 type SortDir = "asc" | "desc";
 
@@ -16,6 +16,8 @@ interface ListHeaderProps {
     sortName: string;
     sortBool: SortDir;
     setSortBool: React.Dispatch<React.SetStateAction<SortDir>>;
+    onApply: (filters: GetAnimeArgs) => void;
+    value: GetAnimeArgs;
 }
 
 
@@ -33,68 +35,23 @@ const ANIME_TYPES = [
 
 const ANIME_STATUS = ["airing", "complete", "upcoming"];
 
-interface AnimeFilters {
-    type: string[];
-    status: string[];
-    rating: string[];
-    sfw: boolean;
-
-    minScore?: number;
-    maxScore?: number;
-
-    genres: number[];
-    genresExclude: number[];
-    producers: number[];
-
-    letter?: string;
-    startDate?: string;
-    endDate?: string;
-
-    orderBy: string;
-    sort: SortDir;
-}
-
-
 export const ListHeader = ({
                                className,
                                title,
                                sortName,
                                sortBool,
                                setSortBool,
+                                onApply,
+                                value
                            }: ListHeaderProps) => {
     const filterModal = useRef<HTMLDivElement | null>(null);
     const [openFilterModal, setOpenFilterModal] = useState(false);
 
-    const [filters, setFilters] = useState<AnimeFilters>({
-        type: [],
-        status: [],
-        rating: [],
+    const [filters, setFilters] = useState<GetAnimeArgs>({
+        type: undefined,
+        status: undefined,
         sfw: true,
-
-        genres: [],
-        genresExclude: [],
-        producers: [],
-
-        orderBy: "score",
-        sort: "desc",
     });
-
-
-    const toggleSort = () => {
-        setSortBool((prev) => (prev === "asc" ? "desc" : "asc"));
-    };
-
-    const toggleArrayValue = (key: keyof AnimeFilters, value: string) => {
-        setFilters((prev) => {
-            const arr = prev[key] as string[];
-            return {
-                ...prev,
-                [key]: arr.includes(value)
-                    ? arr.filter((v) => v !== value)
-                    : [...arr, value],
-            };
-        });
-    };
 
     useEffect(() => {
         const handleClick = (e: MouseEvent) => {
@@ -107,6 +64,29 @@ export const ListHeader = ({
         document.addEventListener("mousedown", handleClick);
         return () => document.removeEventListener("mousedown", handleClick);
     }, []);
+
+    useEffect(() => {
+        setFilters(value);
+    }, [value]);
+
+    const toggleSort = () => {
+        setSortBool((prev) => (prev === "asc" ? "desc" : "asc"));
+    };
+
+    const setRadio = (
+        key: "type" | "status",
+        value: string
+    ) => {
+        setFilters((prev) => ({
+            ...prev,
+            [key]: prev[key] === value ? undefined : value,
+        }));
+    };
+
+    const toApply = () => {
+        onApply(filters);
+        setOpenFilterModal(false);
+    };
 
 
     return (
@@ -153,9 +133,10 @@ export const ListHeader = ({
                                 {ANIME_TYPES.map((type) => (
                                     <label key={type} className={cls.option}>
                                         <input
-                                            type="checkbox"
-                                            checked={filters.type.includes(type)}
-                                            onChange={() => toggleArrayValue("type", type)}
+                                            type="radio"
+                                            name="anime-type"
+                                            checked={filters.type === type}
+                                            onChange={() => setRadio("type", type)}
                                         />
                                         <span>{type}</span>
                                     </label>
@@ -169,9 +150,10 @@ export const ListHeader = ({
                                 {ANIME_STATUS.map((status) => (
                                     <label key={status} className={cls.option}>
                                         <input
-                                            type="checkbox"
-                                            checked={filters.status.includes(status)}
-                                            onChange={() => toggleArrayValue("status", status)}
+                                            type="radio"
+                                            name="anime-status"
+                                            checked={filters.status === status}
+                                            onChange={() => setRadio("status", status)}
                                         />
                                         <span>{status}</span>
                                     </label>
@@ -184,21 +166,19 @@ export const ListHeader = ({
                                 className={cls.reset}
                                 onClick={() =>
                                     setFilters({
-                                        type: [],
-                                        status: [],
-                                        rating: [],
+                                        type: undefined,
+                                        status: undefined,
                                         sfw: true,
-                                        genres: [],
-                                        genresExclude: [],
-                                        producers: [],
-                                        orderBy: "score",
                                         sort: "desc",
                                     })
                                 }
                             >
                                 Сбросить
                             </button>
-                            <button className={cls.apply}>Применить</button>
+
+                            <button className={cls.apply} onClick={toApply}>
+                                Применить
+                            </button>
                         </div>
                     </div>
                 </div>

@@ -1,3 +1,3 @@
-import {AuthForm} from "widgets/AuthForm/ui/AuthForm.tsx";
+import { AuthForm } from "widgets/AuthForm/ui/AuthForm.tsx";
 
-export {AuthForm}
+export { AuthForm };

@@ -2,8 +2,7 @@
   width: 100%;
   padding: 40px 0;
   position: relative;
-
-  background: rgba(0, 0, 0, 0.55);
+  background: rgb(0 0 0 / 55%);
   overflow: hidden;
   backdrop-filter: blur(8px);
 
@@ -38,7 +37,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    transition: opacity .2s ease;
+    transition: opacity 0.2s ease;
 
     &:hover {
       opacity: 0.8;
@@ -61,7 +60,7 @@
 
 .bigItem {
   cursor: pointer;
-  transition: transform .2s ease;
+  transition: transform 0.2s ease;
 
   img {
     width: 100%;
@@ -100,7 +99,6 @@
   }
 }
 
-
 .smallColumn {
   display: flex;
   flex-direction: column;
@@ -112,14 +110,14 @@
   align-items: center;
   gap: 12px;
   cursor: pointer;
-  transition: all .2s linear;
+  transition: all 0.2s linear;
 
   img {
     width: 220px;
     height: 150px;
     border-radius: 6px;
     object-fit: cover;
-    transition: filter .2s ease;
+    transition: filter 0.2s ease;
   }
 
   &:hover {
@@ -155,16 +153,17 @@
   }
 }
 
-@media (max-width: 1024px) {
+@media (width <= 1024px) {
   .newsGrid {
     grid-template-columns: 1fr 1fr;
   }
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .newsGrid {
     grid-template-columns: 1fr;
   }
+
   .bigItem img {
     height: 180px;
   }

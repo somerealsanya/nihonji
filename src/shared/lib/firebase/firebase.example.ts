@@ -4,13 +4,13 @@ import { getAnalytics } from "firebase/analytics";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 const firebaseConfig = {
-    apiKey: "",
-    authDomain: "",
-    projectId: "",
-    storageBucket: "",
-    messagingSenderId: "",
-    appId: "",
-    measurementId: ""
+  apiKey: "",
+  authDomain: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: "",
+  measurementId: "",
 };
 
 const app = initializeApp(firebaseConfig);

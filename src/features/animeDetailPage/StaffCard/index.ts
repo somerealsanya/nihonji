@@ -1,5 +1,3 @@
-import {
-    StaffCard
-} from "./ui/StaffCard.tsx";
+import { StaffCard } from "./ui/StaffCard.tsx";
 
-export {StaffCard};
+export { StaffCard };

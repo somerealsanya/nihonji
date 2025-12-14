@@ -1,7 +1,3 @@
-import {
-    AnimeList
-} from "./ui/AnimeList.tsx";
+import { AnimeList } from "./ui/AnimeList.tsx";
 
-export {
-    AnimeList
-}
+export { AnimeList };

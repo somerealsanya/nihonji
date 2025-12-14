@@ -1,7 +1,3 @@
-import {
-    PopularPage
-} from "./ui/PopularPage.tsx";
+import { PopularPage } from "./ui/PopularPage.tsx";
 
-export {
-    PopularPage
-}
+export { PopularPage };

@@ -1,5 +1,3 @@
-import {Intro} from "./ui/Intro.tsx";
+import { Intro } from "./ui/Intro.tsx";
 
-export {
-    Intro
-}
+export { Intro };

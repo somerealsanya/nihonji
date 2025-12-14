@@ -3,7 +3,6 @@
   font-weight: 700;
   margin-bottom: 24px;
   font-family: var(--font-family-secondary);
-
 }
 
 .topRow {
@@ -12,7 +11,7 @@
   align-items: center;
   margin-bottom: 24px;
 
-  @media (max-width: 600px) {
+  @media (width <= 600px) {
     flex-direction: column;
     align-items: flex-start;
     gap: 14px;
@@ -33,7 +32,6 @@
   padding: 8px 14px;
   cursor: pointer;
   font-size: 18px;
-
   transition: 0.25s ease;
 
   svg {
@@ -46,14 +44,14 @@
   }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.14);
+    background: rgb(255 255 255 / 14%);
   }
 }
 
 .filterOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgb(0 0 0 / 55%);
   backdrop-filter: blur(4px);
   z-index: 999;
 }
@@ -68,7 +66,6 @@
   padding: 100px 24px 32px;
   box-shadow: -10px 0 40px rgb(var(--bg-color-rgb) / var(--bg-shadow-opacity));
   animation: slideIn 0.25s ease forwards;
-
   display: flex;
   flex-direction: column;
 }
@@ -77,6 +74,7 @@
   from {
     transform: translateX(100%);
   }
+
   to {
     transform: translateX(0);
   }
@@ -91,7 +89,7 @@
   h2 {
     font-size: 36px;
     font-weight: 700;
-    text-shadow: 0 0 10px rgba(180, 86, 255, 0.35);
+    text-shadow: 0 0 10px rgb(180 86 255 / 35%);
   }
 }
 
@@ -118,7 +116,6 @@
   font-size: 18px;
   font-weight: 500;
   margin-top: 30px;
-
   letter-spacing: 0.08em;
   margin-bottom: 25px;
   text-transform: uppercase;
@@ -141,33 +138,28 @@
   span {
     min-width: 96px;
     height: 44px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     padding: 0 14px;
     font-size: 14px;
     text-transform: uppercase;
-
     border-radius: 6px;
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-
+    border: 1px solid rgb(255 255 255 / 14%);
     transition: 0.25s ease;
     color: #eaeaea;
   }
 
   &:hover span {
-    background: rgba(255, 255, 255, 0.14);
+    background: rgb(255 255 255 / 14%);
   }
 
   input:checked + span {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: rgb(255 255 255 / 20%);
+    border-color: rgb(255 255 255 / 20%);
   }
 }
-
 
 .footer {
   margin-top: auto;
@@ -187,7 +179,7 @@
 
 .reset {
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgb(255 255 255 / 20%);
   color: #aaa;
 
   &:hover {

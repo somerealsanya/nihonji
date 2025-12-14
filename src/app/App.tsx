@@ -1,26 +1,28 @@
+import { Suspense } from "react";
+
+import { classNames } from "shared/lib/classNames/classNames.ts";
+import { useTheme } from "app/providers/theme";
+import { Loader } from "shared/ui/Loader";
+import { Header } from "widgets/Header";
+import { Footer } from "widgets/Footer";
+
+
 import AppRouter from "./providers/router/ui/AppRouter/AppRouter.tsx";
-import {Suspense} from "react";
-import {Loader} from "../shared/ui/Loader";
-import {Header} from "../widgets/Header";
-import './styles/index.scss';
-import {Footer} from "widgets/Footer";
-import {classNames} from "shared/lib/classNames/classNames.ts";
-import {useTheme} from "app/providers/theme";
+import "./styles/index.scss";
 
 
-function App() {
+const App = () => {
+  const { theme } = useTheme();
 
-      const {theme} = useTheme();
-
-      return (
-        <div className={classNames('app', {}, [theme])}>
-          <Suspense fallback={<Loader />}>
-            <Header />
-            <AppRouter />
-            <Footer />
-          </Suspense>
-        </div>
-      )
+  return (
+    <div className={classNames("app", {}, [theme])}>
+      <Suspense fallback={<Loader />}>
+        <Header />
+        <AppRouter />
+        <Footer />
+      </Suspense>
+    </div>
+  );
 }
 
-export default App
+export default App;

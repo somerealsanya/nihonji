@@ -1,7 +1,3 @@
-import {
-    News
-} from "./ui/News.tsx";
+import { News } from "./ui/News.tsx";
 
-export {
-    News
-}
+export { News };

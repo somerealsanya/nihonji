@@ -1,7 +1,3 @@
-import {
-    ListHeader
-} from "./ui/ListHeader.tsx";
+import { ListHeader } from "./ui/ListHeader.tsx";
 
-export {
-    ListHeader
-}
+export { ListHeader };

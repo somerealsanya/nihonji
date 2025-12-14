@@ -3,7 +3,9 @@
   backdrop-filter: blur(10px);
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
   width: 270px;
   text-decoration: none;
 

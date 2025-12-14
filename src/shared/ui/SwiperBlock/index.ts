@@ -1,3 +1,3 @@
-import {SwiperBlock} from "./ui/SwiperBlock.tsx";
+import { SwiperBlock } from "./ui/SwiperBlock.tsx";
 
-export {SwiperBlock}
+export { SwiperBlock };

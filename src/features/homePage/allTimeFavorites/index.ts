@@ -1,5 +1,3 @@
-import {
-    AllTimeFavorites
-} from "./ui/AllTimeFavorites.tsx";
+import { AllTimeFavorites } from "./ui/AllTimeFavorites.tsx";
 
-export {AllTimeFavorites}
+export { AllTimeFavorites };

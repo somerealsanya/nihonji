@@ -1,18 +1,26 @@
-
-import {classNames} from "shared/lib/classNames/classNames";
-import cls from './ThemeProvider.module.scss';
-
+import {type FC, type ReactNode, useMemo, useState} from "react";
+import {LOCALE_STORAGE_THEME_KEY, ThemeContext} from "../lib/ThemeContext";
+import type {Theme} from "../lib/ThemeContext";
 
 interface ThemeProviderProps {
-    className?: string;
+    children?: ReactNode;
 }
 
+const defaultTheme: Theme = localStorage.getItem(LOCALE_STORAGE_THEME_KEY) as Theme || 'light';
 
-export const ThemeProvider = ({className}: ThemeProviderProps) => {
+export const ThemeProvider: FC<ThemeProviderProps> = ({children}) => {
+    const [theme, setTheme] = useState(defaultTheme);
+
+    const defaultProps = useMemo(() => ({
+        theme,
+        setTheme
+    }), [theme]);
+
+
     return (
-        <div className={classNames(cls.ThemeProvider, {}, [className])}>
-
-        </div>
+        <ThemeContext.Provider value={defaultProps}>
+            {children}
+        </ThemeContext.Provider>
     );
 };
 

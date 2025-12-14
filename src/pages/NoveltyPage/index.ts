@@ -1,7 +1,3 @@
-import {
-    NoveltyPage
-} from "./ui/NoveltyPage.tsx";
+import { NoveltyPage } from "./ui/NoveltyPage.tsx";
 
-export {
-    NoveltyPage
-}
+export { NoveltyPage };

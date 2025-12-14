@@ -1,7 +1,3 @@
-import {
-    SearchPage
-} from "./ui/SearchPage.tsx";
+import { SearchPage } from "./ui/SearchPage.tsx";
 
-export {
-    SearchPage
-}
+export { SearchPage };

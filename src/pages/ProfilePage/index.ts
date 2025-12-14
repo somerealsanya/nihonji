@@ -1,5 +1,3 @@
-import {
-    ProfilePage
-} from "pages/ProfilePage/ui/ProfilePage.tsx";
+import { ProfilePage } from "pages/ProfilePage/ui/ProfilePage.tsx";
 
-export {ProfilePage}
+export { ProfilePage };

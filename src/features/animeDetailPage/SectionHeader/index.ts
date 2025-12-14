@@ -1,5 +1,3 @@
-import {
-    SectionHeader
-} from "./ui/SectionHeader.tsx";
+import { SectionHeader } from "./ui/SectionHeader.tsx";
 
-export {SectionHeader}
+export { SectionHeader };

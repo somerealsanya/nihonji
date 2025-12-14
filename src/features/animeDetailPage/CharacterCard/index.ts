@@ -1,5 +1,3 @@
-import {
-    CharacterCard
-} from "./ui/CharacterCard.tsx";
+import { CharacterCard } from "./ui/CharacterCard.tsx";
 
-export {CharacterCard}
+export { CharacterCard };

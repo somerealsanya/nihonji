@@ -1,5 +1,3 @@
-import {Novelty} from "./ui/Novelty.tsx";
+import { Novelty } from "./ui/Novelty.tsx";
 
-export {
-    Novelty
-}
+export { Novelty };

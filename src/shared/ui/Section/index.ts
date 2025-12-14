@@ -1,7 +1,3 @@
-import {
-    Section
-} from "./ui/Section.tsx";
+import { Section } from "./ui/Section.tsx";
 
-export {
-    Section
-}
+export { Section };

@@ -1,7 +1,3 @@
-import {
-    ThemeSwitcher
-} from "shared/ui/ThemeSwitcher/ui/ThemeSwitcher.tsx";
+import { ThemeSwitcher } from "shared/ui/ThemeSwitcher/ui/ThemeSwitcher.tsx";
 
-export {
-    ThemeSwitcher
-}
+export { ThemeSwitcher };

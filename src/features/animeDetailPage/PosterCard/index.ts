@@ -1,3 +1,3 @@
-import {PosterCard} from "./ui/PosterCard.tsx"
+import { PosterCard } from "./ui/PosterCard.tsx";
 
-export {PosterCard};
+export { PosterCard };

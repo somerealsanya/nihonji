@@ -1,7 +1,3 @@
-import {
-    Footer
-} from "./ui/Footer.tsx";
+import { Footer } from "./ui/Footer.tsx";
 
-export {
-    Footer
-}
+export { Footer };

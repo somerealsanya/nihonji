@@ -22,7 +22,7 @@
   z-index: -1;
   pointer-events: none;
   opacity: 0.6;
-  transition: opacity .2s;
+  transition: opacity 0.2s;
 
   /* создаём тень, которая визуально "уходит" наружу */
   filter: blur(40px);
@@ -30,11 +30,11 @@
 
 /* направленные градиенты */
 .prevBtn::after {
-  background: linear-gradient(to right, rgba(0,0,0,0.6), rgba(0,0,0,0));
+  background: linear-gradient(to right, rgb(0 0 0 / 60%), rgb(0 0 0 / 0%));
 }
 
 .nextBtn::after {
-  background: linear-gradient(to left, rgba(0,0,0,0.6), rgba(0,0,0,0));
+  background: linear-gradient(to left, rgb(0 0 0 / 60%), rgb(0 0 0 / 0%));
 }
 
 .navBtn:hover::after {
@@ -49,11 +49,16 @@
   height: 14px;
   border-top: 3px solid #fff;
   border-right: 3px solid #fff;
-  transition: all .2s linear;
+  transition: all 0.2s linear;
 }
 
-.prevBtn::before { transform: rotate(-135deg); }
-.nextBtn::before { transform: rotate(45deg); }
+.prevBtn::before {
+  transform: rotate(-135deg);
+}
+
+.nextBtn::before {
+  transform: rotate(45deg);
+}
 
 .hidden {
   opacity: 0;
@@ -61,5 +66,10 @@
   transform: translateX(-10px);
 }
 
-.prevBtn { left: 10px; }
-.nextBtn { right: 10px; }
+.prevBtn {
+  left: 10px;
+}
+
+.nextBtn {
+  right: 10px;
+}

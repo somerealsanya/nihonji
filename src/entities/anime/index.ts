@@ -1,7 +1,3 @@
-import {
-    AnimeCard
-} from "./ui/AnimeCard.tsx";
+import { AnimeCard } from "./ui/AnimeCard.tsx";
 
-export {
-    AnimeCard
-}
+export { AnimeCard };

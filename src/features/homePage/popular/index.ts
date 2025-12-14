@@ -1,5 +1,3 @@
-import {Popular} from "./ui/Popular.tsx";
+import { Popular } from "./ui/Popular.tsx";
 
-export {
-    Popular
-}
+export { Popular };

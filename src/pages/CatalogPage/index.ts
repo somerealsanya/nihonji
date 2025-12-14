@@ -1,4 +1,3 @@
-import {lazy} from "react";
+import { lazy } from "react";
 
-
-export const CatalogPage = lazy(() => import('./ui/CatalogPage'));
+export const CatalogPage = lazy(() => import("./ui/CatalogPage"));

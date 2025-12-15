@@ -9,6 +9,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { useRef, useState, useEffect } from "react";
+import {useTranslation} from "react-i18next";
 
 interface IntroProps {
   className?: string;
@@ -21,6 +22,7 @@ export const Intro = ({ className }: IntroProps) => {
   const nextRef = useRef<HTMLButtonElement>(null);
   const paginationRef = useRef<HTMLDivElement>(null);
   const [swiperReady, setSwiperReady] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (prevRef.current && nextRef.current && paginationRef.current) {
@@ -72,7 +74,7 @@ export const Intro = ({ className }: IntroProps) => {
 
       <div className="container">
         <div className={cls.introContent}>
-          <h1 className={cls.introTitle}>Аниме на каждый день — Nihonji</h1>
+          <h1 className={cls.introTitle}>{t("intro.hello")} — Nihonji</h1>
 
           <p className={cls.introSubtitle}>
             Личный гид по аниме: находи тайтлы по настроению, жанру, рейтингу и рекомендациям.

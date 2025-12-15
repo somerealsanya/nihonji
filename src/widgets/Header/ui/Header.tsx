@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThemeSwitcher } from "shared/ui/ThemeSwitcher";
 import cls from "./Header.module.scss";
+import {LangSwitcher} from "shared/ui/LangSwitcher";
 
 const Header = () => {
   const { user, logout } = useAuth();
@@ -69,8 +70,7 @@ const Header = () => {
             <Link to="/search" className={cls.search}>
               <Search />
             </Link>
-            <button className={cls.toggleLang}>RU</button>
-
+            <LangSwitcher className={cls.toggleLang}/>
             <ThemeSwitcher className={cls.toggleTheme} />
           </div>
           {user && (

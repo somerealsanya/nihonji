@@ -3,6 +3,7 @@ import { Loader } from "shared/ui/Loader";
 import { useMultiAnimeNews } from "entities/news/hooks/useMultiAnimeNews";
 import { ANIME_IDS } from "shared/config/newsConfig/newsIds.ts";
 import cls from "./NewsPage.module.scss";
+import {useTranslation} from "react-i18next";
 
 interface NewsPageProps {
   className?: string;
@@ -10,11 +11,12 @@ interface NewsPageProps {
 
 export const NewsPage = ({ className }: NewsPageProps) => {
   const { news, isLoading, error } = useMultiAnimeNews(ANIME_IDS);
+  const { t } = useTranslation();
 
   return (
     <div className={classNames(cls.NewsPage, {}, [className])}>
       <div className="container">
-        <h1 className={cls.title}>Новости</h1>
+        <h1 className={cls.title}>{t("news.pageTitle")}</h1>
 
         {isLoading && (
           <div className={cls.center}>
@@ -22,10 +24,17 @@ export const NewsPage = ({ className }: NewsPageProps) => {
           </div>
         )}
 
-        {error && <div className={cls.error}>Не удалось загрузить новости. Попробуйте позже.</div>}
+        {error && (
+            <div className={cls.error}>
+              {t("news.error")}
+            </div>
+        )}
+
 
         {!isLoading && !error && news.length === 0 && (
-          <div className={cls.empty}>Новостей пока нет.</div>
+            <div className={cls.empty}>
+              {t("news.empty")}
+            </div>
         )}
 
         <div className={cls.grid}>
@@ -49,15 +58,17 @@ export const NewsPage = ({ className }: NewsPageProps) => {
                     </a>
                   </p>
 
-                  <p className={cls.excerpt}>{n.excerpt || "Без описания."}</p>
+                  <p className={cls.excerpt}>
+                    {n.excerpt || t("news.noDescription")}
+                  </p>
 
                   <a
-                    href={n.forum_url || n.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className={cls.readMore}
+                      href={n.forum_url || n.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={cls.readMore}
                   >
-                    Читать далее →
+                    {t("news.readMore")}
                   </a>
                 </div>
               </article>

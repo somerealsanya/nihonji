@@ -6,6 +6,7 @@ import { type GetAnimeArgs, useGetAnimeQuery } from "entities/anime/api/animeApi
 import { Loader } from "shared/ui/Loader";
 import type { Anime } from "entities/anime/model/anime";
 import cls from "./NoveltyPage.module.scss";
+import {useTranslation} from "react-i18next";
 
 interface NoveltyPageProps {
   className?: string;
@@ -19,6 +20,7 @@ export const NoveltyPage: React.FC<NoveltyPageProps> = ({ className }) => {
   const [sortBool, setSortBool] = useState<"asc" | "desc">("asc");
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const { t } = useTranslation();
   const [filters, setFilters] = useState<GetAnimeArgs>({
     type: undefined,
     status: undefined,
@@ -125,12 +127,16 @@ export const NoveltyPage: React.FC<NoveltyPageProps> = ({ className }) => {
     <div className={classNames(cls.NoveltyPage, {}, [className])}>
       <div className="container">
         <ListHeader
-          title="Онгоинги"
-          sortName={sortBool === "asc" ? "Сначала старые" : "Сначала новые"}
-          sortBool={sortBool}
-          setSortBool={setSortBool}
-          onApply={setFilters}
-          value={filters}
+            title={t("novelty.title")}
+            sortName={
+              sortBool === "asc"
+                  ? t("novelty.sort.oldFirst")
+                  : t("novelty.sort.newFirst")
+            }
+            sortBool={sortBool}
+            setSortBool={setSortBool}
+            onApply={setFilters}
+            value={filters}
         />
 
         {isLoading && (
@@ -140,30 +146,39 @@ export const NoveltyPage: React.FC<NoveltyPageProps> = ({ className }) => {
         )}
 
         {error && allItems.length === 0 && (
-          <div className={cls.error}>Не удалось загрузить онгоинги. Попробуйте позже.</div>
+            <div className={cls.error}>{t("novelty.error")}</div>
         )}
+
 
         {allItems.length > 0 && <AnimeList items={allItems} />}
 
         {(isFetching || isLoading) && allItems.length > 0 && (
-          <div className={cls.fetching}>
-            <Loader />
-            <span className={cls.fetchingText}>Загрузка...</span>
-          </div>
+            <div className={cls.fetching}>
+              <Loader />
+            </div>
         )}
+
 
         <div ref={sentinelRef} style={{ height: 1, width: "100%" }} />
 
         {!isLoading && allItems.length > 0 && hasMore && (
           <div className={cls.loadMoreWrap}>
-            <button className={cls.loadMoreBtn} onClick={handleLoadMore} disabled={isFetching}>
-              {isFetching ? "Загружаем..." : "Загрузить ещё"}
+            <button
+                className={cls.loadMoreBtn}
+                onClick={handleLoadMore}
+                disabled={isFetching}
+            >
+              {isFetching
+                  ? t("novelty.loading.fetching")
+                  : t("novelty.loadMore")}
             </button>
           </div>
         )}
 
         {!isLoading && !hasMore && allItems.length > 0 && (
-          <div className={cls.endMessage}>Показаны все доступные результаты.</div>
+            <div className={cls.endMessage}>
+              {t("novelty.end")}
+            </div>
         )}
       </div>
     </div>

@@ -7,23 +7,28 @@ import { AnimeList } from "widgets/AnimeList";
 import { ListHeader } from "shared/ui/ListHeader";
 import { SearchInput } from "shared/ui/SearchInput/ui/SearchInput.tsx";
 import cls from "./CatalogPage.module.scss";
+import {useTranslation} from "react-i18next";
 
 const PAGE_LIMIT = 24;
 
 const SORT_OPTIONS = [
-  { value: "popularity", label: "По популярности" },
-  { value: "score", label: "По рейтингу" },
-  { value: "rank", label: "По месту в топе" },
-  { value: "favorites", label: "По добавлениям в избранное" },
+  { value: "popularity", labelKey: "catalog.sort.popularity" },
+  { value: "score", labelKey: "catalog.sort.score" },
+  { value: "rank", labelKey: "catalog.sort.rank" },
+  { value: "favorites", labelKey: "catalog.sort.favorites" },
 ];
+
 
 const CatalogPage: React.FC = () => {
   const [page, setPage] = useState(1);
   const [allItems, setAllItems] = useState<Anime[]>([]);
-  const [sort, setSort] = useState();
+  const [sort, setSort] = useState<
+      "popularity" | "score" | "rank" | "favorites" | undefined
+  >();
   const [sortBool, setSortBool] = useState<"asc" | "desc">("asc");
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
+  const { t } = useTranslation();
 
   const [filters, setFilters] = useState<GetAnimeArgs>({
     type: undefined,
@@ -98,29 +103,38 @@ const CatalogPage: React.FC = () => {
     <div className={classNames(cls.CatalogPage, {}, [])}>
       <div className="container">
         <ListHeader
-          title="Каталог аниме"
-          sortName={SORT_OPTIONS.find((s) => s.value === sort)?.label ?? "Сортировать"}
-          sortBool={sortBool}
-          setSortBool={setSortBool}
-          onApply={setFilters}
-          value={filters}
+            title={t("catalog.title")}
+            sortName={
+              SORT_OPTIONS.find((s) => s.value === sort)
+                  ? t(SORT_OPTIONS.find((s) => s.value === sort)!.labelKey)
+                  : t("catalog.sort.placeholder")
+            }
+            sortBool={sortBool}
+            setSortBool={setSortBool}
+            onApply={setFilters}
+            value={filters}
         />
+
 
         <div className={cls.filters}>
           <SearchInput
-            initialValue={query}
-            debounceMs={600}
-            placeholder="Поиск аниме..."
-            onChange={(v) => setQuery(v)}
-            onDebounced={(v) => {
-              setDebouncedQuery(v);
-              setPage(1);
-              setAllItems([]);
-            }}
+              initialValue={query}
+              debounceMs={600}
+              placeholder={t("catalog.search.placeholder")}
+              onChange={(v) => setQuery(v)}
+              onDebounced={(v) => {
+                setDebouncedQuery(v);
+                setPage(1);
+                setAllItems([]);
+              }}
           />
         </div>
 
-        {error && <div className={cls.error}>Ошибка загрузки каталога</div>}
+        {error && (
+            <div className={cls.error}>
+              {t("catalog.error")}
+            </div>
+        )}
 
         {allItems.length > 0 && <AnimeList items={allItems} />}
 
@@ -132,7 +146,11 @@ const CatalogPage: React.FC = () => {
 
         <div ref={sentinelRef} style={{ height: 1 }} />
 
-        {!isLoading && !hasMore && <div className={cls.endMessage}>Показаны все результаты</div>}
+        {!isLoading && !hasMore && (
+            <div className={cls.endMessage}>
+              {t("catalog.end")}
+            </div>
+        )}
       </div>
     </div>
   );

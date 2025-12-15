@@ -3,6 +3,7 @@ import { ArrowDownWideNarrow, ArrowUpWideNarrow, SlidersHorizontal } from "lucid
 import { useEffect, useRef, useState } from "react";
 import { type GetAnimeArgs } from "entities/anime/api/animeApi.ts";
 import cls from "./ListHeader.module.scss";
+import {useTranslation} from "react-i18next";
 
 type SortDir = "asc" | "desc";
 
@@ -31,6 +32,7 @@ export const ListHeader = ({
 }: ListHeaderProps) => {
   const filterModal = useRef<HTMLDivElement | null>(null);
   const [openFilterModal, setOpenFilterModal] = useState(false);
+  const { t } = useTranslation();
 
   const [filters, setFilters] = useState<GetAnimeArgs>({
     type: undefined,
@@ -83,7 +85,7 @@ export const ListHeader = ({
 
           <div className={cls.controlItem} onClick={() => setOpenFilterModal(true)}>
             <SlidersHorizontal />
-            <span>Фильтр</span>
+            <span>{t("common.filter")}</span>
           </div>
         </div>
       </div>
@@ -92,7 +94,7 @@ export const ListHeader = ({
         <div className={cls.filterOverlay}>
           <div className={cls.filterModal} ref={filterModal}>
             <div className={cls.header}>
-              <h2>Фильтры</h2>
+              <h2>{t("common.filters")}</h2>
               <button className={cls.closeBtn} onClick={() => setOpenFilterModal(false)}>
                 ✕
               </button>

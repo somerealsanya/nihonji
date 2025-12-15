@@ -5,11 +5,14 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThemeSwitcher } from "shared/ui/ThemeSwitcher";
 import cls from "./Header.module.scss";
+import {LangSwitcher} from "shared/ui/LangSwitcher";
+import {useTranslation} from "react-i18next";
 
 const Header = () => {
   const { user, logout } = useAuth();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const modalRef = useRef<HTMLDivElement>(null);
   const avatarRef = useRef<HTMLDivElement>(null);
@@ -53,13 +56,13 @@ const Header = () => {
             </Link>
             <div className={cls.links}>
               <Link to="/novelty" className={cls.navLink}>
-                Онгоинги
+                {t("header.links.novelty")}
               </Link>
               <Link to="/popular" className={cls.navLink}>
-                Популярное
+                {t("header.links.popular")}
               </Link>
               <Link to="/catalog" className={cls.navLink}>
-                Каталог
+                {t("header.links.catalog")}
               </Link>
             </div>
           </div>
@@ -69,8 +72,7 @@ const Header = () => {
             <Link to="/search" className={cls.search}>
               <Search />
             </Link>
-            <button className={cls.toggleLang}>RU</button>
-
+            <LangSwitcher className={cls.toggleLang}/>
             <ThemeSwitcher className={cls.toggleTheme} />
           </div>
           {user && (
@@ -86,11 +88,11 @@ const Header = () => {
                 <div ref={modalRef} className={cls.modal}>
                   <button onClick={handleNavigateToProfile}>
                     <User />
-                    <span>Профиль</span>
+                    <span>{t("header.profile")}</span>
                   </button>
                   <button onClick={handleLogout}>
                     <LogOut />
-                    <span>Выйти с аккаунта</span>
+                    <span>{t("header.logout")}</span>
                   </button>
                 </div>
               )}

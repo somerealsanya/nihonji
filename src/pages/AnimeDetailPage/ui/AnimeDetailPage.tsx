@@ -25,6 +25,7 @@ import { SectionHeader } from "features/animeDetailPage/SectionHeader";
 import { CharacterCard } from "features/animeDetailPage/CharacterCard";
 import { StaffCard } from "features/animeDetailPage/StaffCard";
 import cls from "./AnimeDetailPage.module.scss";
+import {useTranslation} from "react-i18next";
 
 type ViewSection = "overview" | "characters" | "staff";
 
@@ -45,6 +46,8 @@ export const AnimeDetailPage: React.FC<AnimeDetailPageProps> = ({ className }) =
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [modalImageSrc, setModalImageSrc] = useState<string | null>(null);
   const [modalImageCaption, setModalImageCaption] = useState<string | null>(null);
+
+  const { t } = useTranslation();
 
   const pictures = useMemo(() => {
     if (!picturesData) return [];
@@ -115,7 +118,9 @@ export const AnimeDetailPage: React.FC<AnimeDetailPageProps> = ({ className }) =
   if (error || !data) {
     return (
       <div className={classNames(cls.AnimeDetailPage, {}, [className])}>
-        <div className={cls.center}>Не удалось загрузить данные. Попробуйте позже.</div>
+        <div className={cls.center}>
+          {t("animeDetail.error")}
+        </div>
       </div>
     );
   }
@@ -158,7 +163,7 @@ export const AnimeDetailPage: React.FC<AnimeDetailPageProps> = ({ className }) =
                   ? data.synopsis.length > 360
                     ? `${data.synopsis.slice(0, 360)  }...`
                     : data.synopsis
-                  : "Описание отсутствует."}
+                    : t("animeDetail.noDescription")}
               </p>
 
               <nav className={cls.tabs}>
@@ -166,19 +171,19 @@ export const AnimeDetailPage: React.FC<AnimeDetailPageProps> = ({ className }) =
                   className={activeSection === "overview" ? cls.tabActive : cls.tab}
                   onClick={() => setActiveSection("overview")}
                 >
-                  Overview
+                  {t("animeDetail.tabs.overview")}
                 </button>
                 <button
                   className={activeSection === "characters" ? cls.tabActive : cls.tab}
                   onClick={() => setActiveSection("characters")}
                 >
-                  Characters
+                  {t("animeDetail.tabs.characters")}
                 </button>
                 <button
                   className={activeSection === "staff" ? cls.tabActive : cls.tab}
                   onClick={() => setActiveSection("staff")}
                 >
-                  Staff
+                  {t("animeDetail.tabs.staff")}
                 </button>
               </nav>
             </div>
@@ -198,35 +203,35 @@ export const AnimeDetailPage: React.FC<AnimeDetailPageProps> = ({ className }) =
 
             <ul className={cls.infoList}>
               <li>
-                <strong>Airing: </strong> Ep {data.episodes ?? "—"}
+                <strong>{t("animeDetail.info.airing")}:</strong> Ep {data.episodes ?? "—"}
               </li>
               <li>
-                <strong>Duration: </strong> {data.duration ?? "—"}
+                <strong>{t("animeDetail.info.duration")}:</strong> {data.duration ?? "—"}
               </li>
               <li>
-                <strong>Source:</strong> {data.source ?? "—"}
+                <strong>{t("animeDetail.info.source")}:</strong> {data.source ?? "—"}
               </li>
               <li>
-                <strong>Season / Year:</strong> {data.season ?? "—"} {data.year ?? ""}
+                <strong>{t("animeDetail.info.seasonYear")}:</strong> {data.season ?? "—"} {data.year ?? ""}
               </li>
               <li>
-                <strong>Aired:</strong> {formatDate((data.aired as any)?.from)} —{" "}
+                <strong>{t("animeDetail.info.aired")}:</strong> {formatDate((data.aired as any)?.from)} —{" "}
                 {formatDate((data.aired as any)?.to)}
               </li>
               <li>
-                <strong>Broadcast:</strong> {data.broadcast?.string ?? "—"}
+                <strong>{t("animeDetail.info.broadcast")}:</strong> {data.broadcast?.string ?? "—"}
               </li>
               <li>
-                <strong>Rating:</strong> {data.rating ?? "—"}
+                <strong>{t("animeDetail.info.rating")}:</strong> {data.rating ?? "—"}
               </li>
               <li>
-                <strong>Genres:</strong> {joinNames(data.genres)}
+                <strong>{t("animeDetail.info.genres")}:</strong> {joinNames(data.genres)}
               </li>
               <li>
-                <strong>Studios:</strong> {joinNames(data.studios)}
+                <strong>{t("animeDetail.info.studios")}:</strong> {joinNames(data.studios)}
               </li>
               <li>
-                <strong>Producers:</strong> {joinNames(data.producers)}
+                <strong>{t("animeDetail.info.producers")}:</strong> {joinNames(data.producers)}
               </li>
             </ul>
           </aside>
@@ -235,7 +240,7 @@ export const AnimeDetailPage: React.FC<AnimeDetailPageProps> = ({ className }) =
             {activeSection === "overview" && (
               <>
                 <section className={cls.section}>
-                  <SectionHeader title="Pictures" />
+                  <SectionHeader title={t("animeDetail.sections.pictures")} />
                   {pictures.length > 0 ? (
                     <div className={cls.picturesRow}>
                       {pictures.map((pic: any, idx: number) => {
@@ -282,7 +287,7 @@ export const AnimeDetailPage: React.FC<AnimeDetailPageProps> = ({ className }) =
 
                 <section className={cls.section}>
                   <SectionHeader
-                    title="Characters"
+                    title={t("animeDetail.sections.characters")}
                     onShowAll={() => setActiveSection("characters")}
                   />
                   <div className={cls.charactersGrid}>
@@ -308,7 +313,7 @@ export const AnimeDetailPage: React.FC<AnimeDetailPageProps> = ({ className }) =
 
                 {(embedSrc || watchUrl) && (
                   <section className={cls.section}>
-                    <SectionHeader title="Trailer" />
+                    <SectionHeader title={t("animeDetail.sections.trailer")} />
                     <div className={cls.trailerFrame}>
                       {embedSrc ? (
                         <iframe
@@ -325,7 +330,7 @@ export const AnimeDetailPage: React.FC<AnimeDetailPageProps> = ({ className }) =
                           rel="noreferrer"
                           className={cls.trailerLink}
                         >
-                          <Play /> Watch trailer
+                          <Play /> {t("animeDetail.trailer.watch")}
                         </a>
                       )}
                     </div>
@@ -333,7 +338,7 @@ export const AnimeDetailPage: React.FC<AnimeDetailPageProps> = ({ className }) =
                 )}
 
                 <section className={cls.section}>
-                  <SectionHeader title="Staff" onShowAll={() => setActiveSection("staff")} />
+                  <SectionHeader title={t("animeDetail.sections.staff")} onShowAll={() => setActiveSection("staff")} />
                   <div className={cls.staffRow}>
                     {previewStaff.map((s: any, idx: number) => {
                       const person = s.person || s;
@@ -349,7 +354,9 @@ export const AnimeDetailPage: React.FC<AnimeDetailPageProps> = ({ className }) =
                       );
                     })}
                     {previewStaff.length === 0 && (
-                      <div className={cls.empty}>No staff available.</div>
+                        <div className={cls.empty}>
+                          {t("animeDetail.fallbacks.noPictures")}
+                        </div>
                     )}
                   </div>
                 </section>
@@ -358,7 +365,8 @@ export const AnimeDetailPage: React.FC<AnimeDetailPageProps> = ({ className }) =
 
             {activeSection === "characters" && (
               <section className={cls.section}>
-                <SectionHeader title="All Characters" />
+                <SectionHeader title={t("animeDetail.sections.allCharacters")}
+                />
                 <div className={cls.charList}>
                   {allCharacters.length > 0 ? (
                     allCharacters.map((c: any, idx: number) => {
@@ -402,7 +410,7 @@ export const AnimeDetailPage: React.FC<AnimeDetailPageProps> = ({ className }) =
 
             {activeSection === "staff" && (
               <section className={cls.section}>
-                <SectionHeader title="All Staff" />
+                <SectionHeader title={t("animeDetail.sections.allStaff")} />
                 <div className={cls.modalList}>
                   {staff.length > 0 ? (
                     staff.map((s: any, idx: number) => {

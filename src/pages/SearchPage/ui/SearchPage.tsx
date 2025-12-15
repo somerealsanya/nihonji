@@ -6,6 +6,7 @@ import { Loader } from "shared/ui/Loader";
 import { AnimeList } from "widgets/AnimeList";
 import { SearchInput } from "shared/ui/SearchInput/ui/SearchInput.tsx";
 import cls from "./SearchPage.module.scss";
+import {useTranslation} from "react-i18next";
 
 interface SearchPageProps {
   className?: string;
@@ -21,6 +22,7 @@ export const SearchPage: React.FC<SearchPageProps> = ({ className }) => {
   const [allItems, setAllItems] = useState<Anime[]>([]);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedQuery(query.trim()), DEBOUNCE_MS);
@@ -97,28 +99,30 @@ export const SearchPage: React.FC<SearchPageProps> = ({ className }) => {
     <div className={classNames(cls.SearchPage, {}, [className])}>
       <div className="container">
         <div className={cls.header}>
-          <h1 className={cls.title}>Поиск аниме</h1>
+          <h1 className={cls.title}>{t("search.title")}</h1>
 
           <div className={cls.searchRow}>
             <SearchInput
-              initialValue={query}
-              debounceMs={DEBOUNCE_MS}
-              placeholder="Введите название (например, Naruto, One Piece)..."
-              onChange={(v) => {
-                setQuery(v);
-                setPage(1);
-              }}
-              onDebounced={(v) => {
-                setDebouncedQuery(v.trim());
-                setPage(1);
-                setAllItems([]);
-              }}
+                initialValue={query}
+                debounceMs={DEBOUNCE_MS}
+                placeholder={t("search.input.placeholder")}
+                onChange={(v) => {
+                  setQuery(v);
+                  setPage(1);
+                }}
+                onDebounced={(v) => {
+                  setDebouncedQuery(v.trim());
+                  setPage(1);
+                  setAllItems([]);
+                }}
             />
           </div>
         </div>
 
         {showEmptyPrompt && (
-          <div className={cls.hint}>Введите поисковый запрос — результаты появятся здесь.</div>
+            <div className={cls.hint}>
+              {t("search.hint")}
+            </div>
         )}
 
         {isLoading && page === 1 && (
@@ -127,31 +131,42 @@ export const SearchPage: React.FC<SearchPageProps> = ({ className }) => {
           </div>
         )}
 
-        {noResults && <div className={cls.noResults}>Ничего не найдено.</div>}
+        {noResults && (
+            <div className={cls.noResults}>
+              {t("search.noResults")}
+            </div>
+        )}
+
 
         {allItems.length > 0 && <AnimeList items={allItems} />}
 
         {(isFetching || isLoading) && allItems.length > 0 && (
-          <div className={cls.fetching}>
-            <Loader />
-            <span className={cls.fetchingText}>Загрузка...</span>
-          </div>
+            <div className={cls.fetching}>
+              <Loader />
+            </div>
         )}
+
 
         <div ref={sentinelRef} style={{ height: 1, width: "100%" }} />
 
         {!isLoading && allItems.length > 0 && hasMore && (
           <div className={cls.loadMoreWrap}>
-            <button className={cls.loadMoreBtn} onClick={handleLoadMore} disabled={isFetching}>
-              {isFetching ? "Загружаем..." : "Загрузить ещё"}
+            <button
+                className={cls.loadMoreBtn}
+                onClick={handleLoadMore}
+                disabled={isFetching}
+            >
+              {isFetching
+                  ? t("search.loading.fetching")
+                  : t("search.loadMore")}
             </button>
           </div>
         )}
 
         {error && (
-          <div className={cls.error}>
-            Ошибка при загрузке результатов. Попробуйте обновить страницу.
-          </div>
+            <div className={cls.error}>
+              {t("search.error")}
+            </div>
         )}
       </div>
     </div>

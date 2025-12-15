@@ -6,6 +6,7 @@ import { type GetAnimeArgs, useGetAnimeQuery } from "entities/anime/api/animeApi
 import { Loader } from "shared/ui/Loader";
 import type { Anime } from "entities/anime/model/anime";
 import cls from "./PopularPage.module.scss";
+import {useTranslation} from "react-i18next";
 
 interface PopularPageProps {
   className?: string;
@@ -16,7 +17,8 @@ const PAGE_LIMIT = 24;
 export const PopularPage: React.FC<PopularPageProps> = ({ className }) => {
   const [page, setPage] = useState(1);
   const [allItems, setAllItems] = useState<Anime[]>([]);
-  const [sortBool, setSortBool] = useState<"asc" | "desc">("desc");
+  const [sortBool, setSortBool] = useState<"asc" | "desc">("asc");
+  const { t } = useTranslation();
 
   const [filters, setFilters] = useState<GetAnimeArgs>({
     type: undefined,
@@ -98,12 +100,16 @@ export const PopularPage: React.FC<PopularPageProps> = ({ className }) => {
     <div className={classNames(cls.Popular, {}, [className])}>
       <div className="container">
         <ListHeader
-          title="Популярное"
-          sortName={sortBool === "desc" ? "Сначала популярное" : "Сначала менее популярное"}
-          sortBool={sortBool}
-          setSortBool={setSortBool}
-          onApply={setFilters}
-          value={filters}
+            title={t("popular.title")}
+            sortName={
+              sortBool === "desc"
+                  ? t("popular.sort.most")
+                  : t("popular.sort.least")
+            }
+            sortBool={sortBool}
+            setSortBool={setSortBool}
+            onApply={setFilters}
+            value={filters}
         />
 
         {isLoading && (
@@ -113,7 +119,7 @@ export const PopularPage: React.FC<PopularPageProps> = ({ className }) => {
         )}
 
         {error && allItems.length === 0 && (
-          <div className={cls.error}>Не удалось загрузить популярное</div>
+            <div className={cls.error}>{t("popular.error")}</div>
         )}
 
         {allItems.length > 0 && <AnimeList items={allItems} />}
@@ -127,7 +133,9 @@ export const PopularPage: React.FC<PopularPageProps> = ({ className }) => {
         <div ref={sentinelRef} style={{ height: 1 }} />
 
         {!isLoading && !hasMore && allItems.length > 0 && (
-          <div className={cls.endMessage}>Показаны все доступные результаты</div>
+            <div className={cls.endMessage}>
+              {t("popular.end")}
+            </div>
         )}
       </div>
     </div>

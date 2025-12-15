@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { useMultiAnimeNews } from "entities/news/hooks/useMultiAnimeNews";
 import { ANIME_IDS } from "shared/config/newsConfig/newsIds";
 import cls from "./News.module.scss";
+import {useTranslation} from "react-i18next";
 
 interface NewsProps {
   className?: string;
@@ -10,6 +11,7 @@ interface NewsProps {
 
 export const News = ({ className }: NewsProps) => {
   const { news, isLoading, error } = useMultiAnimeNews(ANIME_IDS);
+  const { t } = useTranslation();
 
   const homeNews = news.slice(0, 10);
 
@@ -21,13 +23,13 @@ export const News = ({ className }: NewsProps) => {
         <div className={cls.bg} />
 
         <div className={cls.headerRow}>
-          <h2>Новости Nihonji</h2>
+          <h2>{t("news.title")}</h2>
           <Link to="/news">
-            <div className={cls.viewAll}>Смотреть все →</div>
+            <div className={cls.viewAll}>{t("news.viewAll")}</div>
           </Link>
         </div>
 
-        {isLoading && <div className={cls.loading}>Загрузка...</div>}
+        {isLoading && <div className={cls.loading}>{t("news.loading")}</div>}
 
         <div className={cls.newsGrid}>
           <div className={cls.bigNewsWrapper}>

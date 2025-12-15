@@ -6,6 +6,7 @@ import { SwiperBlock } from "shared/ui/SwiperBlock";
 import { Section } from "shared/ui/Section";
 import { Link } from "react-router";
 import { useMemo } from "react";
+import {useTranslation} from "react-i18next";
 
 interface PopularProps {
   animeList: Anime[];
@@ -13,6 +14,8 @@ interface PopularProps {
 }
 
 export const Popular = ({ animeList, className }: PopularProps) => {
+  const { t } = useTranslation();
+
   const slides = useMemo(
     () =>
       animeList.map((anime) => (
@@ -26,7 +29,7 @@ export const Popular = ({ animeList, className }: PopularProps) => {
   );
 
   return (
-    <Section title="Популярные в этом сезоне" className={className}>
+    <Section title={t("sections.popularSeason")} className={className}>
       <SwiperBlock>{slides}</SwiperBlock>
     </Section>
   );

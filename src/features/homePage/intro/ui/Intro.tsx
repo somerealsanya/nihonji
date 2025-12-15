@@ -77,8 +77,7 @@ export const Intro = ({ className }: IntroProps) => {
           <h1 className={cls.introTitle}>{t("intro.hello")} — Nihonji</h1>
 
           <p className={cls.introSubtitle}>
-            Личный гид по аниме: находи тайтлы по настроению, жанру, рейтингу и рекомендациям.
-            Каждый день — что-то новое.
+            {t("intro.subtitle")}
           </p>
 
           <div ref={paginationRef} className={cls.introPagination} />
